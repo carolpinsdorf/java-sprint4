@@ -1,4 +1,4 @@
-package org.example.entitities;
+package org.example.entities;
 import java.util.Date;
 
 public class Agendamento extends _EntidadeBase {

@@ -1,4 +1,4 @@
-package org.example.entitities;
+package org.example.entities;
 
 public class Diagnostico extends _EntidadeBase {
     private String descricaoProblema;

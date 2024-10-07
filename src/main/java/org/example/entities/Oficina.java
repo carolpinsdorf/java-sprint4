@@ -1,4 +1,4 @@
-package org.example.entitities;
+package org.example.entities;
 
 public class Oficina extends _EntidadeBase {
     private String nome;

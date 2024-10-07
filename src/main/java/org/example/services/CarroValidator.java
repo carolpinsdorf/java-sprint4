@@ -1,11 +1,11 @@
 package org.example.services;
 
-import org.example.entitities.Carro;
+import org.example.entities.Carro;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class CarroValidator {
+public class CarroValidator extends _BaseEntityValidatorImpl<Carro> {
 
     private static final String regexPlaca = "^[A-Z]{3}[0-9][A-Z][0-9]{2}$";
 
@@ -15,22 +15,22 @@ public class CarroValidator {
             return false;
         }
 
-        if (carro.getMarca() == null || carro.getMarca().trim().isEmpty()) {
+        if (!validaCampoObg(carro.getMarca())) {
             System.out.println("Marca não pode ser vazia.");
             return false;
         }
 
-        if (carro.getModelo() == null || carro.getModelo().trim().isEmpty()) {
+        if (!validaCampoObg(carro.getModelo())) {
             System.out.println("Modelo não pode ser vazio.");
             return false;
         }
 
-        if (carro.getAno() < 1886 || carro.getAno() > 2024) {
+        if (!validaAno(carro.getAno())) {
             System.out.println("Ano inválido. Deve estar entre 1886 e o ano atual.");
             return false;
         }
 
-        if (carro.getQuilometragem() < 0) {
+        if (!validaNumPositivo(carro.getQuilometragem())) {
             System.out.println("Quilometragem inválida. Não pode ser negativa.");
             return false;
         }

@@ -1,6 +1,6 @@
 package org.example.utils;
 
-import org.example.entitities._EntidadeBase;
+import org.example.entities._EntidadeBase;
 
 public interface Logger <T extends _EntidadeBase> {
     void logCreate(T entity);

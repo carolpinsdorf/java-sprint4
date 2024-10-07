@@ -1,7 +1,6 @@
 package org.example.services;
 
-import org.example.entitities.Acesso;
-import org.example.entitities._EntidadeBase;
+import org.example.entities.Acesso;
 
 import java.util.regex.Pattern;
 

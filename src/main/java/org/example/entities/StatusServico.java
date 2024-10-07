@@ -1,4 +1,4 @@
-package org.example.entitities;
+package org.example.entities;
 
 public enum StatusServico {
     PENDENTE,

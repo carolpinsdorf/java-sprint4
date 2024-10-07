@@ -1,4 +1,4 @@
-package org.example.entitities;
+package org.example.entities;
 
 public class Endereco extends _EntidadeBase {
     private String rua;
