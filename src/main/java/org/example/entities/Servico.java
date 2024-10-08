@@ -3,19 +3,24 @@ package org.example.entities;
 public class Servico extends _EntidadeBase {
     private String nomeServico;
     private double preco;
+    private StatusServico status;
 
-    public Servico(){
+    public Servico() {
         super();
+        this.status = StatusServico.PENDENTE;
     }
+
     public Servico(String nomeServico, double preco) {
+        this();
         this.nomeServico = nomeServico;
         this.preco = preco;
     }
 
-    public Servico(Long id, String nomeServico, double preco) {
+    public Servico(Long id, String nomeServico, double preco, StatusServico status) {
         super(id);
         this.nomeServico = nomeServico;
         this.preco = preco;
+        this.status = status; // Inicializa o status
     }
 
     public String getNomeServico() {
@@ -33,12 +38,23 @@ public class Servico extends _EntidadeBase {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+
+    public StatusServico getStatus() { // Novo getter
+        return status;
+    }
+
+    public void setStatus(StatusServico status) { // Novo setter
+        this.status = status;
+    }
+
+    // Outros métodos...
+
     public void atualizarPreco(double novoPreco) {
         this.preco = novoPreco;
     }
 
     public String obterDetalhesServico() {
-        return "Serviço: " + nomeServico + ", Preço: R$" + preco;
+        return "Serviço: " + nomeServico + ", Preço: R$" + preco + ", Status: " + status.obterDescricaoStatus();
     }
 
     public boolean isPrecoAcima(double limite) {

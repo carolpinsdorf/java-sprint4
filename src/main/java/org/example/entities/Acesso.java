@@ -1,6 +1,6 @@
 package org.example.entities;
 
-public class Acesso extends _EntidadeBase{
+public class Acesso extends _EntidadeBase {
     private String username;
     private String password;
 
@@ -22,7 +22,8 @@ public class Acesso extends _EntidadeBase{
         this.password = password;
     }
 
-    public static String getUsername() {
+    // Métodos não estáticos para acessar username e password
+    public String getUsername() {
         return username;
     }
 
@@ -30,7 +31,7 @@ public class Acesso extends _EntidadeBase{
         this.username = username;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
 

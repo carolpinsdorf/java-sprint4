@@ -11,6 +11,23 @@ public class Endereco extends _EntidadeBase {
         super();
     }
 
+    public Endereco(String rua, String cidade, String estado, String cep, String numero) {
+        this.rua = rua;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.numero = numero;
+    }
+
+    public Endereco(Long id, String rua, String cidade, String estado, String cep, String numero) {
+        super(id);
+        this.rua = rua;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+        this.numero = numero;
+    }
+
     public String getRua() {
         return rua;
     }
