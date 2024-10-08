@@ -5,23 +5,18 @@ import org.example.entities.Diagnostico;
 public class DiagnosticoValidator extends _BaseEntityValidatorImpl<Diagnostico> {
 
     public boolean validar(Diagnostico diagnostico) {
-        if (!validaCampoObg(diagnostico.getDescricaoProblema())) {
-            System.out.println("A descrição do problema é obrigatória e não pode ser vazia.");
+        if (!validaCampoObg(diagnostico.getDescDiagnostico())) {
+            System.out.println("A descrição do diagnóstico é obrigatória e não pode ser vazia.");
             return false;
         }
 
-        if (!validaCampoObg(diagnostico.getSolucaoProposta())) {
-            System.out.println("A solução proposta é obrigatória e não pode ser vazia.");
+        if (diagnostico.getFkServico() == null) {
+            System.out.println("O diagnóstico deve estar relacionado a um serviço.");
             return false;
         }
 
-        if (!validaNumPositivo(diagnostico.getCustoEstimado())) {
-            System.out.println("O custo estimado deve ser um número positivo.");
-            return false;
-        }
-
-        if (!validaNumero(String.valueOf(diagnostico.getCustoEstimado()))) {
-            System.out.println("O custo estimado deve ser numérico.");
+        if (diagnostico.getFkDtc() == null) {
+            System.out.println("O diagnóstico deve estar relacionado a um DTC.");
             return false;
         }
 

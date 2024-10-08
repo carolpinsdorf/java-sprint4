@@ -1,80 +1,47 @@
 package org.example.entities;
 
 public class Oficina extends _EntidadeBase {
-    private String nome;
-    private String cnpj;
-    private String telefone;
-    private String endereco;
+    private Long idOficina;
+    private int cnpjOficina;
+    private Long fkAcesso;
 
-    public Oficina(){
-        super();
+    public Oficina(){}
+
+    public Oficina(Long idOficina, int cnpjOficina, Long fkAcesso) {
+        this.idOficina = idOficina;
+        this.cnpjOficina = cnpjOficina;
+        this.fkAcesso = fkAcesso;
     }
 
-    public Oficina(String nome, String cnpj, String telefone, String endereco) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.telefone = telefone;
-        this.endereco = endereco;
-    }
-
-    public Oficina(Long id, String nome, String cnpj, String telefone, String endereco) {
+    public Oficina(Long id, Long idOficina, int cnpjOficina, Long fkAcesso) {
         super(id);
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.telefone = telefone;
-        this.endereco = endereco;
+        this.idOficina = idOficina;
+        this.cnpjOficina = cnpjOficina;
+        this.fkAcesso = fkAcesso;
     }
 
-    public String getNome() {
-        return nome;
+    public Long getIdOficina() {
+        return idOficina;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setIdOficina(Long idOficina) {
+        this.idOficina = idOficina;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    public int getCnpjOficina() {
+        return cnpjOficina;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+    public void setCnpjOficina(int cnpjOficina) {
+        this.cnpjOficina = cnpjOficina;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public Long getFkAcesso() {
+        return fkAcesso;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public String obterInformacoesOficina() {
-        return "Nome: " + nome + ", CNPJ: " + cnpj + ", Telefone: " + telefone;
-    }
-
-    public void atualizarTelefone(String novoTelefone) {
-        this.telefone = novoTelefone;
-    }
-
-    public boolean isCnpjValido() {
-        return this.cnpj.length() == 14;
-    }
-
-    public void atualizarNome(String novoNome) {
-        this.nome = novoNome;
-    }
-
-    public boolean isMesmoTelefone(String outroTelefone) {
-        return this.telefone.equals(outroTelefone);
+    public void setFkAcesso(Long fkAcesso) {
+        this.fkAcesso = fkAcesso;
     }
 }
 

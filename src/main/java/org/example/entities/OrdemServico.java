@@ -1,57 +1,48 @@
 package org.example.entities;
 
 public class OrdemServico extends _EntidadeBase {
-    private String descricaoServico;
-    private double valorTotal;
+    private Long idOrdemServico;
+    private String statusServico;
+    private Long fkAgendamento;
 
     public OrdemServico(){
         super();
     }
 
-
-    public OrdemServico(String descricaoServico, double valorTotal) {
-        this.descricaoServico = descricaoServico;
-        this.valorTotal = valorTotal;
+    public OrdemServico(Long idOrdemServico, String statusServico, Long fkAgendamento) {
+        this.idOrdemServico = idOrdemServico;
+        this.statusServico = statusServico;
+        this.fkAgendamento = fkAgendamento;
     }
 
-    public OrdemServico(Long id, String descricaoServico, double valorTotal) {
+    public OrdemServico(Long id, Long idOrdemServico, String statusServico, Long fkAgendamento) {
         super(id);
-        this.descricaoServico = descricaoServico;
-        this.valorTotal = valorTotal;
+        this.idOrdemServico = idOrdemServico;
+        this.statusServico = statusServico;
+        this.fkAgendamento = fkAgendamento;
     }
 
-    public String getDescricaoServico() {
-        return descricaoServico;
+    public Long getIdOrdemServico() {
+        return idOrdemServico;
     }
 
-    public void setDescricaoServico(String descricaoServico) {
-        this.descricaoServico = descricaoServico;
+    public void setIdOrdemServico(Long idOrdemServico) {
+        this.idOrdemServico = idOrdemServico;
     }
 
-    public double getValorTotal() {
-        return valorTotal;
+    public String getStatusServico() {
+        return statusServico;
     }
 
-    public void setValorTotal(double valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-    public void atualizarValor(double novoValor) {
-        this.valorTotal = novoValor;
+    public void setStatusServico(String statusServico) {
+        this.statusServico = statusServico;
     }
 
-    public void atualizarDescricao(String novaDescricao) {
-        this.descricaoServico = novaDescricao;
+    public Long getFkAgendamento() {
+        return fkAgendamento;
     }
 
-    public boolean isValorAcima(double limite) {
-        return this.valorTotal > limite;
-    }
-
-    public String obterResumoOrdem() {
-        return "Serviço: " + descricaoServico + ", Valor Total: R$" + valorTotal;
-    }
-
-    public void aplicarDesconto(double percentual) {
-        this.valorTotal -= this.valorTotal * percentual / 100;
+    public void setFkAgendamento(Long fkAgendamento) {
+        this.fkAgendamento = fkAgendamento;
     }
 }

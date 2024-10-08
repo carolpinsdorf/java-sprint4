@@ -25,7 +25,7 @@ public class CarroValidator extends _BaseEntityValidatorImpl<Carro> {
             return false;
         }
 
-        if (!validaAno(carro.getAno())) {
+        if (!validaAno(carro.getAnoFabricacao())) {
             System.out.println("Ano inválido. Deve estar entre 1886 e o ano atual.");
             return false;
         }

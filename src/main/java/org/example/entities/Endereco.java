@@ -1,22 +1,90 @@
 package org.example.entities;
 
 public class Endereco extends _EntidadeBase {
-    private String rua;
+    private Long idEndereco;
+    private int cepEndereco;
+    private String logEndereco;
+    private int numEndereco;
+    private String cmplEndereco;
+    private String bairro;
     private String cidade;
     private String estado;
-    private String cep;
-    private String numero;
+    private Long fkCliente;
+    private Long fkOficina;
 
-    public Endereco(){
-        super();
+    public Endereco(Long idEndereco, int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Long fkCliente, Long fkOficina) {
+        this.idEndereco = idEndereco;
+        this.cepEndereco = cepEndereco;
+        this.logEndereco = logEndereco;
+        this.numEndereco = numEndereco;
+        this.cmplEndereco = cmplEndereco;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.fkCliente = fkCliente;
+        this.fkOficina = fkOficina;
     }
 
-    public String getRua() {
-        return rua;
+    public Endereco(Long id, Long idEndereco, int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Long fkCliente, Long fkOficina) {
+        super(id);
+        this.idEndereco = idEndereco;
+        this.cepEndereco = cepEndereco;
+        this.logEndereco = logEndereco;
+        this.numEndereco = numEndereco;
+        this.cmplEndereco = cmplEndereco;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.fkCliente = fkCliente;
+        this.fkOficina = fkOficina;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public Long getIdEndereco() {
+        return idEndereco;
+    }
+
+    public void setIdEndereco(Long idEndereco) {
+        this.idEndereco = idEndereco;
+    }
+
+    public int getCepEndereco() {
+        return cepEndereco;
+    }
+
+    public void setCepEndereco(int cepEndereco) {
+        this.cepEndereco = cepEndereco;
+    }
+
+    public String getLogEndereco() {
+        return logEndereco;
+    }
+
+    public void setLogEndereco(String logEndereco) {
+        this.logEndereco = logEndereco;
+    }
+
+    public int getNumEndereco() {
+        return numEndereco;
+    }
+
+    public void setNumEndereco(int numEndereco) {
+        this.numEndereco = numEndereco;
+    }
+
+    public String getCmplEndereco() {
+        return cmplEndereco;
+    }
+
+    public void setCmplEndereco(String cmplEndereco) {
+        this.cmplEndereco = cmplEndereco;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public String getCidade() {
@@ -35,39 +103,19 @@ public class Endereco extends _EntidadeBase {
         this.estado = estado;
     }
 
-    public String getCep() {
-        return cep;
+    public Long getFkCliente() {
+        return fkCliente;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setFkCliente(Long fkCliente) {
+        this.fkCliente = fkCliente;
     }
 
-    public String getNumero() {
-        return numero;
+    public Long getFkOficina() {
+        return fkOficina;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public String obterEnderecoCompleto() {
-        return rua + ", " + cidade + ", " + estado + ", " + cep;
-    }
-
-    public void atualizarCidade(String novaCidade) {
-        this.cidade = novaCidade;
-    }
-
-    public boolean isCepValido() {
-        return cep.length() == 8;
-    }
-
-    public void atualizarEstado(String novoEstado) {
-        this.estado = novoEstado;
-    }
-
-    public boolean isEnderecoIgual(Endereco outroEndereco) {
-        return this.cep.equals(outroEndereco.getCep()) && this.rua.equals(outroEndereco.getRua());
+    public void setFkOficina(Long fkOficina) {
+        this.fkOficina = fkOficina;
     }
 }

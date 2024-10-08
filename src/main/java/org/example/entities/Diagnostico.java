@@ -1,68 +1,59 @@
 package org.example.entities;
 
 public class Diagnostico extends _EntidadeBase {
-    private String descricaoProblema;
-    private String solucaoProposta;
-    private double custoEstimado;
+    private Long idDiagnostico;
+    private String descDiagnostico;
+    private Long fkServico;
+    private Long fkDtc;
 
-    public Diagnostico(){
-        super();
+
+    public Diagnostico(){}
+
+    public Diagnostico(Long idDiagnostico, String descDiagnostico, Long fkServico, Long fkDtc) {
+        this.idDiagnostico = idDiagnostico;
+        this.descDiagnostico = descDiagnostico;
+        this.fkServico = fkServico;
+        this.fkDtc = fkDtc;
     }
 
-    public Diagnostico(String descricaoProblema, String solucaoProposta, double custoEstimado) {
-        this.descricaoProblema = descricaoProblema;
-        this.solucaoProposta = solucaoProposta;
-        this.custoEstimado = custoEstimado;
-    }
-
-    public Diagnostico(Long id, String descricaoProblema, String solucaoProposta, double custoEstimado) {
+    public Diagnostico(Long id, Long idDiagnostico, String descDiagnostico, Long fkServico, Long fkDtc) {
         super(id);
-        this.descricaoProblema = descricaoProblema;
-        this.solucaoProposta = solucaoProposta;
-        this.custoEstimado = custoEstimado;
+        this.idDiagnostico = idDiagnostico;
+        this.descDiagnostico = descDiagnostico;
+        this.fkServico = fkServico;
+        this.fkDtc = fkDtc;
     }
 
-    public String getDescricaoProblema() {
-        return descricaoProblema;
+    public Long getIdDiagnostico() {
+        return idDiagnostico;
     }
 
-    public void setDescricaoProblema(String descricaoProblema) {
-        this.descricaoProblema = descricaoProblema;
+    public void setIdDiagnostico(Long idDiagnostico) {
+        this.idDiagnostico = idDiagnostico;
     }
 
-    public String getSolucaoProposta() {
-        return solucaoProposta;
+    public String getDescDiagnostico() {
+        return descDiagnostico;
     }
 
-    public void setSolucaoProposta(String solucaoProposta) {
-        this.solucaoProposta = solucaoProposta;
+    public void setDescDiagnostico(String descDiagnostico) {
+        this.descDiagnostico = descDiagnostico;
     }
 
-    public double getCustoEstimado() {
-        return custoEstimado;
+    public Long getFkServico() {
+        return fkServico;
     }
 
-    public void setCustoEstimado(double custoEstimado) {
-        this.custoEstimado = custoEstimado;
-    }
-    public void atualizarSolucao(String novaSolucao) {
-        this.solucaoProposta = novaSolucao;
+    public void setFkServico(Long fkServico) {
+        this.fkServico = fkServico;
     }
 
-    public void atualizarCusto(double novoCusto) {
-        this.custoEstimado = novoCusto;
+    public Long getFkDtc() {
+        return fkDtc;
     }
 
-    public String obterDiagnosticoCompleto() {
-        return "Problema: " + descricaoProblema + ", Solução: " + solucaoProposta + ", Custo: " + custoEstimado;
-    }
-
-    public boolean isCustoAlto(double limite) {
-        return this.custoEstimado > limite;
-    }
-
-    public void atualizarDescricaoProblema(String novaDescricao) {
-        this.descricaoProblema = novaDescricao;
+    public void setFkDtc(Long fkDtc) {
+        this.fkDtc = fkDtc;
     }
 }
 

@@ -1,67 +1,103 @@
 package org.example.entities;
 
+import java.util.Date;
+
 public class Cliente extends _EntidadeBase {
-    private String nome;
-    private String telefone;
-    private String cpf;
+    private Long idCliente;
+    private Long cpfCliente;
+    private String nomeCliente;
+    private String rgCliente;
+    private Date dataNascimento;
+    private String sexoCliente;
+    private String estadoCivil;
+    private Long fkAcesso;
 
-    public Cliente(){
-        super();
+    public Cliente(){}
+
+    public Cliente(Long idCliente, Long cpfCliente, String nomeCliente, String rgCliente, Date dataNascimento, String sexoCliente, String estadoCivil, Long fkAcesso) {
+        this.idCliente = idCliente;
+        this.cpfCliente = cpfCliente;
+        this.nomeCliente = nomeCliente;
+        this.rgCliente = rgCliente;
+        this.dataNascimento = dataNascimento;
+        this.sexoCliente = sexoCliente;
+        this.estadoCivil = estadoCivil;
+        this.fkAcesso = fkAcesso;
     }
 
-    public Cliente(String nome, String telefone, String cpf) {
-        this.nome = nome;
-        this.telefone = telefone;
-        this.cpf = cpf;
-    }
-
-    public Cliente(Long id, String nome, String telefone, String cpf) {
+    public Cliente(Long id, Long idCliente, Long cpfCliente, String nomeCliente, String rgCliente, Date dataNascimento, String sexoCliente, String estadoCivil, Long fkAcesso) {
         super(id);
-        this.nome = nome;
-        this.telefone = telefone;
-        this.cpf = cpf;
+        this.idCliente = idCliente;
+        this.cpfCliente = cpfCliente;
+        this.nomeCliente = nomeCliente;
+        this.rgCliente = rgCliente;
+        this.dataNascimento = dataNascimento;
+        this.sexoCliente = sexoCliente;
+        this.estadoCivil = estadoCivil;
+        this.fkAcesso = fkAcesso;
     }
 
-    public String getNome() {
-        return nome;
+    public Long getIdCliente() {
+        return idCliente;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public String getTelefone() {
-        return telefone;
+    public Long getCpfCliente() {
+        return cpfCliente;
     }
 
-    public String getCpf() {
-        return cpf;
+    public void setCpfCliente(Long cpfCliente) {
+        this.cpfCliente = cpfCliente;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-    public String obterDetalhesCliente() {
-        return "Cliente: " + nome + ", Telefone: " + telefone;
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
-    public boolean verificarNome(String nome) {
-        return this.nome.equalsIgnoreCase(nome);
+    public String getRgCliente() {
+        return rgCliente;
     }
 
-    public void atualizarTelefone(String novoTelefone) {
-        this.telefone = novoTelefone;
+    public void setRgCliente(String rgCliente) {
+        this.rgCliente = rgCliente;
     }
 
-    public void atualizarNome(String novoNome) {
-        this.nome = novoNome;
+    public Date getDataNascimento() {
+        return dataNascimento;
     }
 
-    public boolean verificarTelefone(String telefone) {
-        return this.telefone.equals(telefone);
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getSexoCliente() {
+        return sexoCliente;
+    }
+
+    public void setSexoCliente(String sexoCliente) {
+        this.sexoCliente = sexoCliente;
+    }
+
+    public String getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(String estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+    public Long getFkAcesso() {
+        return fkAcesso;
+    }
+
+    public void setFkAcesso(Long fkAcesso) {
+        this.fkAcesso = fkAcesso;
     }
 }

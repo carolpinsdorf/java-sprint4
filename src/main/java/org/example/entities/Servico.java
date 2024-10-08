@@ -1,55 +1,77 @@
 package org.example.entities;
 
 public class Servico extends _EntidadeBase {
-    private String nomeServico;
-    private double preco;
+    private Long idServico;
+    private String descricao;
+    private float valor;
+    private String tempoExecucao;
+    private StatusServico statusServico;
+    private Long fkAgendamento;
 
-    public Servico(){
-        super();
-    }
-    public Servico(String nomeServico, double preco) {
-        this.nomeServico = nomeServico;
-        this.preco = preco;
+    public Servico(Long idServico, String descricao, float valor, String tempoExecucao, StatusServico statusServico, Long fkAgendamento) {
+        this.idServico = idServico;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.tempoExecucao = tempoExecucao;
+        this.statusServico = statusServico;
+        this.fkAgendamento = fkAgendamento;
     }
 
-    public Servico(Long id, String nomeServico, double preco) {
+    public Servico(Long id, Long idServico, String descricao, float valor, String tempoExecucao, StatusServico statusServico, Long fkAgendamento) {
         super(id);
-        this.nomeServico = nomeServico;
-        this.preco = preco;
+        this.idServico = idServico;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.tempoExecucao = tempoExecucao;
+        this.statusServico = statusServico;
+        this.fkAgendamento = fkAgendamento;
     }
 
-    public String getNomeServico() {
-        return nomeServico;
+    public Long getIdServico() {
+        return idServico;
     }
 
-    public void setNomeServico(String nomeServico) {
-        this.nomeServico = nomeServico;
+    public void setIdServico(Long idServico) {
+        this.idServico = idServico;
     }
 
-    public double getPreco() {
-        return preco;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
-    }
-    public void atualizarPreco(double novoPreco) {
-        this.preco = novoPreco;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public String obterDetalhesServico() {
-        return "Serviço: " + nomeServico + ", Preço: R$" + preco;
+    public float getValor() {
+        return valor;
     }
 
-    public boolean isPrecoAcima(double limite) {
-        return this.preco > limite;
+    public void setValor(float valor) {
+        this.valor = valor;
     }
 
-    public void aplicarPromocao(double desconto) {
-        this.preco -= this.preco * desconto / 100;
+    public String getTempoExecucao() {
+        return tempoExecucao;
     }
 
-    public void atualizarNomeServico(String novoNome) {
-        this.nomeServico = novoNome;
+    public void setTempoExecucao(String tempoExecucao) {
+        this.tempoExecucao = tempoExecucao;
+    }
+
+    public StatusServico getStatusServico() {
+        return statusServico;
+    }
+
+    public void setStatusServico(StatusServico statusServico) {
+        this.statusServico = statusServico;
+    }
+
+    public Long getFkAgendamento() {
+        return fkAgendamento;
+    }
+
+    public void setFkAgendamento(Long fkAgendamento) {
+        this.fkAgendamento = fkAgendamento;
     }
 }
