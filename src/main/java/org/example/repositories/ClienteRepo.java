@@ -14,9 +14,9 @@ public class ClienteRepo extends _BaseRepoImpl<Cliente> {
     @Override
     public Cliente findById(Long id) {
         Cliente cliente = null;
-        try {
-            String sql = "SELECT * FROM clientes WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM clientes WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -37,10 +37,10 @@ public class ClienteRepo extends _BaseRepoImpl<Cliente> {
     @Override
     public List<Cliente> findAll() {
         List<Cliente> clientes = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM clientes";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+        String sql = "SELECT * FROM clientes";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Cliente cliente = new Cliente(
@@ -59,13 +59,46 @@ public class ClienteRepo extends _BaseRepoImpl<Cliente> {
 
     @Override
     public void save(Cliente cliente) {
-        try {
-            String sql = "INSERT INTO clientes (nome, telefone, cpf) VALUES (?, ?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getTelefone());
-            stmt.setString(3, cliente.getCpf());
+        // Verifica se já existe um cliente com o mesmo CPF
+        String checkQuery = "SELECT COUNT(*) FROM clientes WHERE cpf = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+            checkStmt.setString(1, cliente.getCpf());
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Cliente com o CPF " + cliente.getCpf() + " já existe!");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Obtém o próximo ID da sequência
+        Long novoId = null;
+        String idQuery = "SELECT CLIENTES_SEQ.NEXTVAL FROM dual";
+        try (PreparedStatement idStmt = connection.prepareStatement(idQuery);
+             ResultSet idRs = idStmt.executeQuery()) {
+            if (idRs.next()) {
+                novoId = idRs.getLong(1);
+            } else {
+                throw new SQLException("Não foi possível gerar um novo ID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // Insere o cliente usando o novo ID
+        String query = "INSERT INTO clientes (id, nome, telefone, cpf) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, novoId); // Usar o ID gerado manualmente
+            stmt.setString(2, cliente.getNome());
+            stmt.setString(3, cliente.getTelefone());
+            stmt.setString(4, cliente.getCpf());
             stmt.executeUpdate();
+
+            cliente.setId(novoId);
+            System.out.println("Cliente inserido: " + cliente);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -73,9 +106,8 @@ public class ClienteRepo extends _BaseRepoImpl<Cliente> {
 
     @Override
     public void update(Cliente cliente) {
-        try {
-            String sql = "UPDATE clientes SET nome = ?, telefone = ?, cpf = ? WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "UPDATE clientes SET nome = ?, telefone = ?, cpf = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cliente.getNome());
             stmt.setString(2, cliente.getTelefone());
             stmt.setString(3, cliente.getCpf());
@@ -88,9 +120,8 @@ public class ClienteRepo extends _BaseRepoImpl<Cliente> {
 
     @Override
     public void delete(Long id) {
-        try {
-            String sql = "DELETE FROM clientes WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "DELETE FROM clientes WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -76,5 +76,15 @@ public class Oficina extends _EntidadeBase {
     public boolean isMesmoTelefone(String outroTelefone) {
         return this.telefone.equals(outroTelefone);
     }
+    @Override
+    public String toString() {
+        return "Oficina{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cnpj='" + cnpj + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", endereco='" + endereco + '\'' +
+                '}';
+    }
 }
 

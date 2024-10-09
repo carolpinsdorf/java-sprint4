@@ -17,6 +17,9 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
 
     @Override
     public Acesso findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
         Acesso acesso = null;
         String sql = "SELECT * FROM Acesso WHERE id = ?";
 
@@ -38,6 +41,7 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
 
         return acesso;
     }
+
 
     @Override
     public List<Acesso> findAll() {
@@ -62,12 +66,12 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
 
         return acessos;
     }
-
-    @Override
     public void save(Acesso acesso) {
-        String sql = "INSERT INTO Acesso (username, password) VALUES (?, ?)";
+        try {
+            String sql = "INSERT INTO Acesso (id, username, password) " +
+                    "VALUES (ACESSO_SEQ.NEXTVAL, ?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, acesso.getUsername());
             stmt.setString(2, acesso.getPassword());
             stmt.executeUpdate();
@@ -76,6 +80,13 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
+
 
     @Override
     public void update(Acesso acesso) {

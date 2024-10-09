@@ -61,7 +61,19 @@ public class CarroRepo extends _BaseRepoImpl<Carro> {
 
     @Override
     public void save(Carro carro) {
-        String query = "INSERT INTO carros (modelo, placa, ano, quilometragem, marca) VALUES (?, ?, ?, ?, ?)";
+        String checkQuery = "SELECT COUNT(*) FROM carros WHERE placa = ?";
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+            checkStmt.setString(1, carro.getPlaca());
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Carro com a placa " + carro.getPlaca() + " já existe!");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String query = "INSERT INTO carros (id, modelo, placa, ano, quilometragem, marca) VALUES (CARROS_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, carro.getModelo());
             stmt.setString(2, carro.getPlaca());
@@ -69,10 +81,12 @@ public class CarroRepo extends _BaseRepoImpl<Carro> {
             stmt.setInt(4, carro.getQuilometragem());
             stmt.setString(5, carro.getMarca());
             stmt.executeUpdate();
+            System.out.println("Carro inserido: " + carro);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void update(Carro carro) {

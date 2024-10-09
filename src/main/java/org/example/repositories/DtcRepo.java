@@ -57,12 +57,26 @@ public class DtcRepo extends _BaseRepoImpl<Dtc> {
 
     @Override
     public void save(Dtc dtc) {
+        Long novoId = null;
         try {
-            String sql = "INSERT INTO dtcs (codigo, descricao) VALUES (?, ?)";
+            String idQuery = "SELECT DTCS_SEQ.NEXTVAL FROM dual";
+            try (PreparedStatement idStmt = connection.prepareStatement(idQuery);
+                 ResultSet idRs = idStmt.executeQuery()) {
+                if (idRs.next()) {
+                    novoId = idRs.getLong(1); // Pega o próximo valor da sequência
+                } else {
+                    throw new SQLException("Não foi possível gerar um novo ID");
+                }
+            }
+
+            String sql = "INSERT INTO dtcs (id, codigo, descricao) VALUES (?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1, dtc.getCodigo());
-            stmt.setString(2, dtc.getDescricao());
+            stmt.setLong(1, novoId); // Usar o ID gerado manualmente
+            stmt.setString(2, dtc.getCodigo());
+            stmt.setString(3, dtc.getDescricao());
             stmt.executeUpdate();
+
+            dtc.setId(novoId); // Atribui o ID ao Dtc
         } catch (SQLException e) {
             e.printStackTrace();
         }

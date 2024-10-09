@@ -60,16 +60,20 @@ public class DiagnosticoRepo extends _BaseRepoImpl<Diagnostico> {
     @Override
     public void save(Diagnostico diagnostico) {
         try {
-            String sql = "INSERT INTO diagnosticos (descricaoProblema, solucaoProposta, custoEstimado) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO diagnosticos (id, descricaoProblema, solucaoProposta, custoEstimado) " +
+                    "VALUES (DIAGNOSTICOS_SEQ.NEXTVAL, ?, ?, ?)";
+
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, diagnostico.getDescricaoProblema());
             stmt.setString(2, diagnostico.getSolucaoProposta());
             stmt.setDouble(3, diagnostico.getCustoEstimado());
             stmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void update(Diagnostico diagnostico) {

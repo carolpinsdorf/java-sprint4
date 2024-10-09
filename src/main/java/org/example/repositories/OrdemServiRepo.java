@@ -14,9 +14,8 @@ public class OrdemServiRepo extends _BaseRepoImpl<OrdemServico> {
     @Override
     public OrdemServico findById(Long id) {
         OrdemServico ordemServico = null;
-        try {
-            String sql = "SELECT * FROM ordens_servico WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM ordens_servico WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -36,9 +35,8 @@ public class OrdemServiRepo extends _BaseRepoImpl<OrdemServico> {
     @Override
     public List<OrdemServico> findAll() {
         List<OrdemServico> ordensServico = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM ordens_servico";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM ordens_servico";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -57,9 +55,8 @@ public class OrdemServiRepo extends _BaseRepoImpl<OrdemServico> {
 
     @Override
     public void save(OrdemServico ordemServico) {
-        try {
-            String sql = "INSERT INTO ordens_servico (descricaoServico, valorTotal) VALUES (?, ?)";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "INSERT INTO ordens_servico (descricaoServico, valorTotal) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ordemServico.getDescricaoServico());
             stmt.setDouble(2, ordemServico.getValorTotal());
             stmt.executeUpdate();
@@ -70,9 +67,8 @@ public class OrdemServiRepo extends _BaseRepoImpl<OrdemServico> {
 
     @Override
     public void update(OrdemServico ordemServico) {
-        try {
-            String sql = "UPDATE ordens_servico SET descricaoServico = ?, valorTotal = ? WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "UPDATE ordens_servico SET descricaoServico = ?, valorTotal = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ordemServico.getDescricaoServico());
             stmt.setDouble(2, ordemServico.getValorTotal());
             stmt.setLong(3, ordemServico.getId());
@@ -84,9 +80,8 @@ public class OrdemServiRepo extends _BaseRepoImpl<OrdemServico> {
 
     @Override
     public void delete(Long id) {
-        try {
-            String sql = "DELETE FROM ordens_servico WHERE id = ?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "DELETE FROM ordens_servico WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -64,7 +64,7 @@ public class EnderecoRepo extends _BaseRepoImpl<Endereco> {
     @Override
     public void save(Endereco endereco) {
         try {
-            String sql = "INSERT INTO enderecos (rua, cidade, estado, cep, numero) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO enderecos (id, rua, cidade, estado, cep, numero) VALUES (ENDERECOS_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, endereco.getRua());
             stmt.setString(2, endereco.getCidade());
@@ -72,6 +72,13 @@ public class EnderecoRepo extends _BaseRepoImpl<Endereco> {
             stmt.setString(4, endereco.getCep());
             stmt.setString(5, endereco.getNumero());
             stmt.executeUpdate();
+
+            String selectSql = "SELECT ENDERECOS_SEQ.CURRVAL FROM dual";
+            PreparedStatement selectStmt = connection.prepareStatement(selectSql);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                endereco.setId(rs.getLong(1)); // Atribui o ID gerado ao endereço
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

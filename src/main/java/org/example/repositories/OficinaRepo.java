@@ -69,6 +69,14 @@ public class OficinaRepo extends _BaseRepoImpl<Oficina> {
             stmt.setString(3, oficina.getTelefone());
             stmt.setString(4, oficina.getEndereco());
             stmt.executeUpdate();
+
+            // Obtenha o ID gerado
+            String selectSql = "SELECT OFICINAS_SEQ.CURRVAL FROM dual";
+            PreparedStatement selectStmt = connection.prepareStatement(selectSql);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                oficina.setId(rs.getLong(1)); // Atribui o ID gerado à oficina
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

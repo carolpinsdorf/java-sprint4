@@ -1,7 +1,6 @@
 package org.example.repositories;
 
 import org.example.entities.Agendamento;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,7 +55,7 @@ public class AgendamentoRepo extends _BaseRepoImpl<Agendamento> {
 
     @Override
     public void save(Agendamento agendamento) {
-        String query = "INSERT INTO agendamentos (dataAgendada, descricao) VALUES (?, ?)";
+        String query = "INSERT INTO agendamentos (id, dataAgendada, descricao) VALUES (AGENDAMENTOS_SEQ.NEXTVAL, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setDate(1, new java.sql.Date(agendamento.getDataAgendada().getTime()));
             stmt.setString(2, agendamento.getDescricao());
