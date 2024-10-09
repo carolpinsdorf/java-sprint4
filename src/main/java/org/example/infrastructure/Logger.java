@@ -1,4 +1,4 @@
-package org.example.utils;
+package org.example.infrastructure;
 
 import org.example.entities._EntidadeBase;
 

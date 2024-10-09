@@ -23,7 +23,7 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Você pode querer lançar uma exceção personalizada aqui
+
         }
         return null;
     }
@@ -67,7 +67,6 @@ public class AcessoRepo extends _BaseRepoImpl<Acesso> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Você pode querer lançar uma exceção personalizada aqui
         }
     }
 
