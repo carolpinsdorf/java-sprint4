@@ -1,33 +1,22 @@
 package org.example.entities;
 
 public class OrdemServico extends _EntidadeBase {
-    private Long idOrdemServico;
     private String statusServico;
-    private Long fkAgendamento;
+    private Agendamento agendamento;
 
-    public OrdemServico(){
-        super();
+
+    public OrdemServico() {
     }
 
-    public OrdemServico(Long idOrdemServico, String statusServico, Long fkAgendamento) {
-        this.idOrdemServico = idOrdemServico;
+    public OrdemServico(String statusServico, Agendamento agendamento) {
         this.statusServico = statusServico;
-        this.fkAgendamento = fkAgendamento;
+        this.agendamento = agendamento;
     }
 
-    public OrdemServico(Long id, Long idOrdemServico, String statusServico, Long fkAgendamento) {
+    public OrdemServico(int id, String statusServico, Agendamento agendamento) {
         super(id);
-        this.idOrdemServico = idOrdemServico;
         this.statusServico = statusServico;
-        this.fkAgendamento = fkAgendamento;
-    }
-
-    public Long getIdOrdemServico() {
-        return idOrdemServico;
-    }
-
-    public void setIdOrdemServico(Long idOrdemServico) {
-        this.idOrdemServico = idOrdemServico;
+        this.agendamento = agendamento;
     }
 
     public String getStatusServico() {
@@ -38,11 +27,11 @@ public class OrdemServico extends _EntidadeBase {
         this.statusServico = statusServico;
     }
 
-    public Long getFkAgendamento() {
-        return fkAgendamento;
+    public Agendamento getAgendamento() {
+        return agendamento;
     }
 
-    public void setFkAgendamento(Long fkAgendamento) {
-        this.fkAgendamento = fkAgendamento;
+    public void setAgendamento(Agendamento agendamento) {
+        this.agendamento = agendamento;
     }
 }

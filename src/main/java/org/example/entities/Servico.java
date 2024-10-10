@@ -1,38 +1,30 @@
 package org.example.entities;
 
 public class Servico extends _EntidadeBase {
-    private Long idServico;
     private String descricao;
     private float valor;
     private String tempoExecucao;
     private StatusServico statusServico;
-    private Long fkAgendamento;
+    private Agendamento agendamento;
 
-    public Servico(Long idServico, String descricao, float valor, String tempoExecucao, StatusServico statusServico, Long fkAgendamento) {
-        this.idServico = idServico;
+    public Servico() {
+    }
+
+    public Servico(String descricao, float valor, String tempoExecucao, StatusServico statusServico, Agendamento agendamento) {
         this.descricao = descricao;
         this.valor = valor;
         this.tempoExecucao = tempoExecucao;
         this.statusServico = statusServico;
-        this.fkAgendamento = fkAgendamento;
+        this.agendamento = agendamento;
     }
 
-    public Servico(Long id, Long idServico, String descricao, float valor, String tempoExecucao, StatusServico statusServico, Long fkAgendamento) {
+    public Servico(int id, String descricao, float valor, String tempoExecucao, StatusServico statusServico, Agendamento agendamento) {
         super(id);
-        this.idServico = idServico;
         this.descricao = descricao;
         this.valor = valor;
         this.tempoExecucao = tempoExecucao;
         this.statusServico = statusServico;
-        this.fkAgendamento = fkAgendamento;
-    }
-
-    public Long getIdServico() {
-        return idServico;
-    }
-
-    public void setIdServico(Long idServico) {
-        this.idServico = idServico;
+        this.agendamento = agendamento;
     }
 
     public String getDescricao() {
@@ -67,11 +59,11 @@ public class Servico extends _EntidadeBase {
         this.statusServico = statusServico;
     }
 
-    public Long getFkAgendamento() {
-        return fkAgendamento;
+    public Agendamento getAgendamento() {
+        return agendamento;
     }
 
-    public void setFkAgendamento(Long fkAgendamento) {
-        this.fkAgendamento = fkAgendamento;
+    public void setAgendamento(Agendamento agendamento) {
+        this.agendamento = agendamento;
     }
 }

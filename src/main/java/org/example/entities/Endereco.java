@@ -1,50 +1,40 @@
 package org.example.entities;
 
 public class Endereco extends _EntidadeBase {
-    private Long idEndereco;
     private int cepEndereco;
     private String logEndereco;
     private int numEndereco;
-    private String cmplEndereco;
     private String bairro;
     private String cidade;
     private String estado;
-    private Long fkCliente;
-    private Long fkOficina;
+    private Cliente cliente;
+    private Oficina oficina;
 
-    public Endereco(Long idEndereco, int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Long fkCliente, Long fkOficina) {
-        this.idEndereco = idEndereco;
+
+    public Endereco() {
+    }
+
+    public Endereco(int cepEndereco, String logEndereco, int numEndereco, String bairro, String cidade, String estado, Cliente cliente, Oficina oficina) {
         this.cepEndereco = cepEndereco;
         this.logEndereco = logEndereco;
         this.numEndereco = numEndereco;
-        this.cmplEndereco = cmplEndereco;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
-        this.fkCliente = fkCliente;
-        this.fkOficina = fkOficina;
+        this.cliente = cliente;
+        this.oficina = oficina;
     }
 
-    public Endereco(Long id, Long idEndereco, int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Long fkCliente, Long fkOficina) {
+    public Endereco(int id, int cepEndereco, String logEndereco, int numEndereco, String bairro, String cidade, String estado, Cliente cliente, Oficina oficina) {
         super(id);
-        this.idEndereco = idEndereco;
         this.cepEndereco = cepEndereco;
         this.logEndereco = logEndereco;
         this.numEndereco = numEndereco;
-        this.cmplEndereco = cmplEndereco;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
-        this.fkCliente = fkCliente;
-        this.fkOficina = fkOficina;
-    }
-
-    public Long getIdEndereco() {
-        return idEndereco;
-    }
-
-    public void setIdEndereco(Long idEndereco) {
-        this.idEndereco = idEndereco;
+        this.cliente = cliente;
+        this.oficina = oficina;
     }
 
     public int getCepEndereco() {
@@ -71,14 +61,6 @@ public class Endereco extends _EntidadeBase {
         this.numEndereco = numEndereco;
     }
 
-    public String getCmplEndereco() {
-        return cmplEndereco;
-    }
-
-    public void setCmplEndereco(String cmplEndereco) {
-        this.cmplEndereco = cmplEndereco;
-    }
-
     public String getBairro() {
         return bairro;
     }
@@ -103,19 +85,19 @@ public class Endereco extends _EntidadeBase {
         this.estado = estado;
     }
 
-    public Long getFkCliente() {
-        return fkCliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setFkCliente(Long fkCliente) {
-        this.fkCliente = fkCliente;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public Long getFkOficina() {
-        return fkOficina;
+    public Oficina getOficina() {
+        return oficina;
     }
 
-    public void setFkOficina(Long fkOficina) {
-        this.fkOficina = fkOficina;
+    public void setOficina(Oficina oficina) {
+        this.oficina = oficina;
     }
 }

@@ -6,35 +6,47 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiagnosticoRepo extends _BaseRepoImpl<Diagnostico> {
+public class DiagnosticoRepo implements _EntidadeRepo<Diagnostico> {
+    private Connection connection;
 
     public DiagnosticoRepo(Connection connection) {
-        super(connection);
+        this.connection = connection;
     }
 
     @Override
-    public Diagnostico findById(Long id) {
-        String sql = "SELECT * FROM T_DIAGNOSTICO WHERE id_diagnostico = ?";
+    public Diagnostico findById(int id) {
+        Diagnostico diagnostico = null;
+        String sql = "SELECT * FROM T_DIAGNOSTICO WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return mapResultSetToDiagnostico(rs);
+                diagnostico = new Diagnostico(
+                        rs.getInt("id"), // ID do diagnóstico
+                        rs.getString("desc_diagnostico"), // Descrição do diagnóstico
+                        null, // Serviço - você pode definir isso conforme necessário
+                        null  // Dtc - você pode definir isso conforme necessário
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return diagnostico;
     }
 
     @Override
     public List<Diagnostico> findAll() {
         List<Diagnostico> diagnosticos = new ArrayList<>();
         String sql = "SELECT * FROM T_DIAGNOSTICO";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Diagnostico diagnostico = mapResultSetToDiagnostico(rs);
+                Diagnostico diagnostico = new Diagnostico(
+                        rs.getInt("id"),
+                        rs.getString("desc_diagnostico"),
+                        null, // Serviço - você pode definir isso conforme necessário
+                        null  // Dtc - você pode definir isso conforme necessário
+                );
                 diagnosticos.add(diagnostico);
             }
         } catch (SQLException e) {
@@ -46,11 +58,10 @@ public class DiagnosticoRepo extends _BaseRepoImpl<Diagnostico> {
     @Override
     public void save(Diagnostico entity) {
         String sql = "INSERT INTO T_DIAGNOSTICO (desc_diagnostico, fk_servico, fk_id_dtc) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getDescDiagnostico());
-            stmt.setLong(2, entity.getFkServico());
-            stmt.setLong(3, entity.getFkDtc());
-
+            stmt.setNull(2, Types.INTEGER); // Substitua isso pelo id do serviço, se necessário
+            stmt.setNull(3, Types.INTEGER); // Substitua isso pelo id do dtc, se necessário
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,13 +70,12 @@ public class DiagnosticoRepo extends _BaseRepoImpl<Diagnostico> {
 
     @Override
     public void update(Diagnostico entity) {
-        String sql = "UPDATE T_DIAGNOSTICO SET desc_diagnostico = ?, fk_servico = ?, fk_id_dtc = ? WHERE id_diagnostico = ?";
+        String sql = "UPDATE T_DIAGNOSTICO SET desc_diagnostico = ?, fk_servico = ?, fk_id_dtc = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getDescDiagnostico());
-            stmt.setLong(2, entity.getFkServico());
-            stmt.setLong(3, entity.getFkDtc());
-            stmt.setLong(4, entity.getIdDiagnostico());
-
+            stmt.setNull(2, Types.INTEGER); // Substitua isso pelo id do serviço, se necessário
+            stmt.setNull(3, Types.INTEGER); // Substitua isso pelo id do dtc, se necessário
+            stmt.setInt(4, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,22 +83,13 @@ public class DiagnosticoRepo extends _BaseRepoImpl<Diagnostico> {
     }
 
     @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM T_DIAGNOSTICO WHERE id_diagnostico = ?";
+    public void delete(int id) {
+        String sql = "DELETE FROM T_DIAGNOSTICO WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private Diagnostico mapResultSetToDiagnostico(ResultSet rs) throws SQLException {
-        return new Diagnostico(
-                rs.getLong("id_diagnostico"),
-                rs.getString("desc_diagnostico"),
-                rs.getLong("fk_servico"),
-                rs.getLong("fk_id_dtc")
-        );
     }
 }

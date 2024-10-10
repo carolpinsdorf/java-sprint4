@@ -1,31 +1,21 @@
 package org.example.entities;
 
 public class Oficina extends _EntidadeBase {
-    private Long idOficina;
     private int cnpjOficina;
-    private Long fkAcesso;
+    private Acesso acesso;
 
-    public Oficina(){}
-
-    public Oficina(Long idOficina, int cnpjOficina, Long fkAcesso) {
-        this.idOficina = idOficina;
-        this.cnpjOficina = cnpjOficina;
-        this.fkAcesso = fkAcesso;
+    public Oficina() {
     }
 
-    public Oficina(Long id, Long idOficina, int cnpjOficina, Long fkAcesso) {
+    public Oficina(int id, int cnpjOficina, Acesso acesso) {
         super(id);
-        this.idOficina = idOficina;
         this.cnpjOficina = cnpjOficina;
-        this.fkAcesso = fkAcesso;
+        this.acesso = acesso;
     }
 
-    public Long getIdOficina() {
-        return idOficina;
-    }
-
-    public void setIdOficina(Long idOficina) {
-        this.idOficina = idOficina;
+    // Construtor que aceita apenas o ID
+    public Oficina(int id) {
+        super(id); // Passa o ID para a classe base
     }
 
     public int getCnpjOficina() {
@@ -36,12 +26,11 @@ public class Oficina extends _EntidadeBase {
         this.cnpjOficina = cnpjOficina;
     }
 
-    public Long getFkAcesso() {
-        return fkAcesso;
+    public Acesso getAcesso() {
+        return acesso;
     }
 
-    public void setFkAcesso(Long fkAcesso) {
-        this.fkAcesso = fkAcesso;
+    public void setAcesso(Acesso acesso) {
+        this.acesso = acesso;
     }
 }
-

@@ -2,30 +2,35 @@ package org.example.services;
 
 import org.example.entities.Cliente;
 
-import java.util.regex.Pattern;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ClienteValidator extends _BaseEntityValidatorImpl<Cliente> {
 
-    public boolean validaNome(String nome) {
-        return nome != null && nome.trim().length() >= 3;
+    private final Set<Long> cpfsExistentes = new HashSet<>();
+
+    public boolean validaCpf(Long cpf) {
+        if (cpf == null || String.valueOf(cpf).length() != 11) return false;
+        return !cpfsExistentes.contains(cpf);
     }
 
-    public boolean validaCPF(String cpf) {
-        String regexCPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}";
-        return Pattern.matches(regexCPF, cpf);
+
+    public boolean validaMaiorDeIdade(LocalDate dataNascimento) {
+        if (dataNascimento == null) return false;
+        LocalDate hoje = LocalDate.now();
+        return Period.between(dataNascimento, hoje).getYears() >= 18;
     }
 
-    public boolean validaEmail(String email) {
-        String regexEmail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";  // Regex para e-mail básico
-        return Pattern.matches(regexEmail, email);
+
+    public void adicionarCpfExistente(Long cpf) {
+        cpfsExistentes.add(cpf);
     }
 
-    public boolean validaTelefone(String telefone) {
-        String regexTelefone = "^\\(\\d{2}\\) \\d{4,5}-\\d{4}$";
-        return Pattern.matches(regexTelefone, telefone);
-    }
-
-    public boolean validaEndereco(String endereco) {
-        return validaCampoObg(endereco);
+    public boolean validarCliente(Cliente cliente) {
+        return validaCpf(cliente.getCpfCliente()) &&
+                validaMaiorDeIdade(cliente.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     }
 }

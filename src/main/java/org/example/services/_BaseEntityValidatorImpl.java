@@ -20,7 +20,6 @@ public class _BaseEntityValidatorImpl<T> implements _EntityValidator<T> {
 
     @Override
     public boolean validaNumero(String numero) {
-        // Verifica se é um número
         return numero != null && numero.matches("\\d+");
     }
 }

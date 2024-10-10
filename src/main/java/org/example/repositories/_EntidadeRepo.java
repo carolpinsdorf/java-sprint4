@@ -3,9 +3,9 @@ package org.example.repositories;
 import java.util.List;
 
 public interface _EntidadeRepo<T> {
-    T findById(Long id);
+    T findById(int id);
     List<T> findAll();
     void save(T entity);
     void update(T entity);
-    void delete(Long id);
+    void delete(int id);
 }

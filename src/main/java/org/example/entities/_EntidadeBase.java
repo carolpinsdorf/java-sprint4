@@ -2,26 +2,36 @@ package org.example.entities;
 
 import java.util.Date;
 
-public class _EntidadeBase {
-    protected Long id;
-    protected Date dataCriacao;
-    protected Date dataAtualizacao;
+
+public abstract class _EntidadeBase {
+    private int id;
+    private Date dataCriacao;
+    private Date dataAtualizacao;
 
 
     public _EntidadeBase() {
-
+        this.dataCriacao = new Date();
+        this.dataAtualizacao = new Date();
     }
 
-    public _EntidadeBase(Long id) {
+    public _EntidadeBase(int id) {
         this.id = id;
         this.dataCriacao = new Date();
+        this.dataAtualizacao = new Date();
     }
 
-    public Long getId() {
+    public _EntidadeBase(int id, Date dataCriacao, Date dataAtualizacao) {
+        this.id = id;
+        this.dataCriacao = dataCriacao;
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    // Getters e Setters
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -39,26 +49,5 @@ public class _EntidadeBase {
 
     public void setDataAtualizacao(Date dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
-    }
-
-
-    public void atualizarDataAtualizacao() {
-        this.dataAtualizacao = new Date();
-    }
-
-    public boolean isNovo() {
-        return this.id == null;
-    }
-
-    public long calcularTempoExistente() {
-        return (new Date()).getTime() - this.dataCriacao.getTime();
-    }
-
-    public String obterInformacoes() {
-        return "ID: " + id + ", Criado em: " + dataCriacao;
-    }
-
-    public void atualizarId(Long novoId) {
-        this.id = novoId;
     }
 }
