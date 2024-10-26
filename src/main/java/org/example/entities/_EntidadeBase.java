@@ -1,32 +1,25 @@
 package org.example.entities;
 
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Objects;
 
+@MappedSuperclass
 public abstract class _EntidadeBase {
-    private int id;
-    private Date dataCriacao;
-    private Date dataAtualizacao;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
     public _EntidadeBase() {
-        this.dataCriacao = new Date();
-        this.dataAtualizacao = new Date();
+
     }
 
     public _EntidadeBase(int id) {
         this.id = id;
-        this.dataCriacao = new Date();
-        this.dataAtualizacao = new Date();
     }
 
-    public _EntidadeBase(int id, Date dataCriacao, Date dataAtualizacao) {
-        this.id = id;
-        this.dataCriacao = dataCriacao;
-        this.dataAtualizacao = dataAtualizacao;
-    }
-
-    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -35,19 +28,16 @@ public abstract class _EntidadeBase {
         this.id = id;
     }
 
-    public Date getDataCriacao() {
-        return dataCriacao;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        _EntidadeBase that = (_EntidadeBase) o;
+        return id == that.id;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
-    public Date getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(Date dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

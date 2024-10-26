@@ -1,29 +1,42 @@
 package org.example.infrastructure;
 
+import org.example.entities.Acesso;
+import org.example.repositories.AcessoRepo;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
 public class DatabaseConfig {
     private static String URL = "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
-    private static String USER = "RM556898";
-    private static String SENHA = "021298";
+    private static String USER = "RM555130";
+    private static String SENHA = "040506";
 
     public static Connection getConnection() throws SQLException{
         return DriverManager.getConnection(URL,USER,SENHA);
     }
     public static void createDropTables(){
         String dropTables = """
-               DROP TABLE T_DIAGNOSTICO;
-               DROP TABLE T_SERVICO;
-               DROP TABLE T_ORDEM_SERVICO;
-               DROP TABLE T_DTC;
-               DROP TABLE ENDERECO;
-               DROP TABLE T_AGENDAMENTO;
-               DROP TABLE T_CARRO;
-               DROP TABLE T_OFICINA;
-               DROP TABLE T_CLIENTE;
-               DROP TABLE T_ACESSO""";
+            BEGIN
+                EXECUTE IMMEDIATE 'DROP TABLE T_DIAGNOSTICO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_SERVICO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_ORDEM_SERVICO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_DTC';
+                EXECUTE IMMEDIATE 'DROP TABLE T_ENDERECO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_AGENDAMENTO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_CARRO';
+                EXECUTE IMMEDIATE 'DROP TABLE T_OFICINA';
+                EXECUTE IMMEDIATE 'DROP TABLE T_CLIENTE';
+                EXECUTE IMMEDIATE 'DROP TABLE T_ACESSO';
+            EXCEPTION
+                WHEN OTHERS THEN
+                    IF SQLCODE != -942 THEN -- Ignorar erro de tabela inexistente
+                        RAISE;
+                    END IF;
+            END;
+            """;
 
         String createTableAcesso = """
                 CREATE TABLE T_ACESSO (
@@ -150,7 +163,61 @@ public class DatabaseConfig {
                     fk_id_dtc           int REFERENCES T_DTC(id_dtc)
                 );
                 """;
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
+            // Executar os comandos SQL para dropar as tabelas
+            stmt.execute(dropTables);
+
+            // Criar todas as tabelas
+            stmt.execute(createTableAcesso);
+            stmt.execute(createTableCliente);
+            stmt.execute(createTableOficina);
+            stmt.execute(createTableCarro);
+            stmt.execute(createTableAgendamento);
+            stmt.execute(createTableEndereco);
+            stmt.execute(createTableDtc);
+            stmt.execute(createTableOrdemServico);
+            stmt.execute(createTableServico);
+            stmt.execute(createTableDiagnostico);
+
+            testAcessoRepo();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    private static void testAcessoRepo() {
+        AcessoRepo acessoRepo = new AcessoRepo();
 
+        Acesso novoAcesso = new Acesso("teste@example.com", "usuario123456", "senha12345");
+        acessoRepo.save(novoAcesso);
+        System.out.println("Acesso inserido.");
+
+        // Teste de busca por ID
+        Acesso acessoEncontrado = acessoRepo.findById(1); // Supondo que o ID 1 exista
+        if (acessoEncontrado != null) {
+            System.out.println("Acesso encontrado: " + acessoEncontrado.getEmailAcesso());
+        } else {
+            System.out.println("Acesso não encontrado.");
+        }
+
+        // Teste de busca de todos os acessos
+        List<Acesso> todosAcessos = acessoRepo.findAll();
+        System.out.println("Total de acessos encontrados: " + todosAcessos.size());
+        for (Acesso acesso : todosAcessos) {
+            System.out.println("Acesso: " + acesso.getEmailAcesso());
+        }
+
+        // Teste de atualização
+        if (acessoEncontrado != null) {
+            acessoEncontrado.setSenha("novaSenha12345");
+            acessoRepo.update(acessoEncontrado);
+            System.out.println("Acesso atualizado.");
+        }
+
+        // Teste de exclusão
+        if (acessoEncontrado != null) {
+            acessoRepo.delete(acessoEncontrado.getId());
+            System.out.println("Acesso deletado.");
+        }
+    }
 }

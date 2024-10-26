@@ -1,9 +1,17 @@
 package org.example.entities;
 
-public class OrdemServico extends _EntidadeBase {
-    private String statusServico;
-    private Agendamento agendamento;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "T_ORDEM_SERVICO")
+public class OrdemServico extends _EntidadeBase {
+
+    @Column(name = "status_servico", nullable = false, length = 20)
+    private String statusServico;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_agendamento", nullable = false)
+    private Agendamento agendamento;
 
     public OrdemServico() {
     }

@@ -1,39 +1,33 @@
 package org.example.repositories;
 
+import org.example.entities.Agendamento;
 import org.example.entities.Servico;
-import org.example.entities.StatusServico;
+import org.example.infrastructure.DatabaseConfig;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ServicoRepo implements _EntidadeRepo<Servico> {
-    private Connection connection;
-
-    public ServicoRepo(Connection connection) {
-        this.connection = connection;
-    }
 
     @Override
     public Servico findById(int id) {
         Servico servico = null;
         String sql = "SELECT * FROM T_SERVICO WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                servico = new Servico(
-                        rs.getInt("id"), // ID do serviço
-                        rs.getString("descricao"), // Descrição do serviço
-                        rs.getFloat("valor"), // Valor do serviço
-                        rs.getString("tempo_execucao"), // Tempo de execução
-                        StatusServico.valueOf(rs.getString("status_servico")), // Status do serviço
-                        null // Agendamento - você pode definir isso conforme necessário
-                );
+                servico = mapRowToServico(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return servico;
     }
 
@@ -41,17 +35,13 @@ public class ServicoRepo implements _EntidadeRepo<Servico> {
     public List<Servico> findAll() {
         List<Servico> servicos = new ArrayList<>();
         String sql = "SELECT * FROM T_SERVICO";
-        try (Statement stmt = connection.createStatement()) {
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
+
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Servico servico = new Servico(
-                        rs.getInt("id"),
-                        rs.getString("descricao"),
-                        rs.getFloat("valor"),
-                        rs.getString("tempo_execucao"),
-                        StatusServico.valueOf(rs.getString("status_servico")), // Status do serviço
-                        null
-                );
+                Servico servico = mapRowToServico(rs);
                 servicos.add(servico);
             }
         } catch (SQLException e) {
@@ -61,13 +51,20 @@ public class ServicoRepo implements _EntidadeRepo<Servico> {
     }
 
     @Override
-    public void save(Servico entity) {
+    public void save(Servico servico) {
         String sql = "INSERT INTO T_SERVICO (descricao, valor, tempo_execucao, fk_agendamento) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, entity.getDescricao());
-            stmt.setFloat(2, entity.getValor());
-            stmt.setString(3, entity.getTempoExecucao());
-            stmt.setNull(4, Types.INTEGER); // ID do agendamento, se necessário
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, servico.getDescricao());
+            stmt.setFloat(2, servico.getValor());
+            stmt.setString(3, servico.getTempoExecucao());
+            if (servico.getAgendamento() != null) {
+                stmt.setInt(4, servico.getAgendamento().getId());
+            } else {
+                stmt.setNull(4, Types.INTEGER);
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,14 +72,21 @@ public class ServicoRepo implements _EntidadeRepo<Servico> {
     }
 
     @Override
-    public void update(Servico entity) {
+    public void update(Servico servico) {
         String sql = "UPDATE T_SERVICO SET descricao = ?, valor = ?, tempo_execucao = ?, fk_agendamento = ? WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, entity.getDescricao());
-            stmt.setFloat(2, entity.getValor());
-            stmt.setString(3, entity.getTempoExecucao());
-            stmt.setNull(4, Types.INTEGER); // ID do agendamento, se necessário
-            stmt.setInt(5, entity.getId());
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, servico.getDescricao());
+            stmt.setFloat(2, servico.getValor());
+            stmt.setString(3, servico.getTempoExecucao());
+            if (servico.getAgendamento() != null) {
+                stmt.setInt(4, servico.getAgendamento().getId());
+            } else {
+                stmt.setNull(4, Types.INTEGER);
+            }
+            stmt.setInt(5, servico.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,11 +96,30 @@ public class ServicoRepo implements _EntidadeRepo<Servico> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM T_SERVICO WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Servico mapRowToServico(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String descricao = resultSet.getString("descricao");
+        float valor = resultSet.getFloat("valor");
+        String tempoExecucao = resultSet.getString("tempo_execucao");
+        int fkAgendamento = resultSet.getInt("fk_agendamento");
+
+        // Aqui você pode instanciar Agendamento se precisar dele.
+        Agendamento agendamento = null;
+        if (!resultSet.wasNull()) {
+            agendamento = new AgendamentoRepo().findById(fkAgendamento); // Carregar Agendamento pelo ID
+        }
+
+        return new Servico(id, descricao, valor, tempoExecucao, null, agendamento);
     }
 }

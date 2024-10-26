@@ -13,7 +13,7 @@ import java.util.List;
 public class AcessoResource {
 
     private static List<Acesso> acessos = new ArrayList<>();
-    private static int idCounter = 1; // Contador de ID para novos acessos
+    private static int idCounter = 1;
     private AcessoValidator acessoValidator = new AcessoValidator();
 
     @GET

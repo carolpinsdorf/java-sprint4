@@ -26,8 +26,9 @@ public class AcessoValidator extends _BaseEntityValidatorImpl<Acesso> {
     }
 
     public boolean validaSenha(String senha) {
-        return validaCampoObg(senha) && senha.length() > 10;
+        return validaCampoObg(senha) && senha.length() <= 10;
     }
+
 
     public void adicionarAcessoExistente(String email, String username) {
         emailsExistentes.add(email);

@@ -1,40 +1,32 @@
 package org.example.repositories;
 
 import org.example.entities.Endereco;
+import org.example.infrastructure.DatabaseConfig;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnderecoRepo implements _EntidadeRepo<Endereco> {
-    private Connection connection;
-
-    public EnderecoRepo(Connection connection) {
-        this.connection = connection;
-    }
 
     @Override
     public Endereco findById(int id) {
         Endereco endereco = null;
         String sql = "SELECT * FROM T_ENDERECO WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                endereco = new Endereco(
-                        rs.getInt("id"), // ID do Endereço
-                        rs.getInt("cep_endereco"), // CEP
-                        rs.getString("log_endereco"), // Logradouro
-                        rs.getInt("num_endereco"), // Número
-                        rs.getString("bairro"), // Bairro
-                        rs.getString("cidade"), // Cidade
-                        rs.getString("estado"), // Estado
-                        null, // Cliente - você pode definir isso conforme necessário
-                        null // Oficina - você pode definir isso conforme necessário
-                );
+                endereco = mapResultSetToEndereco(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return endereco;
     }
 
@@ -42,41 +34,39 @@ public class EnderecoRepo implements _EntidadeRepo<Endereco> {
     public List<Endereco> findAll() {
         List<Endereco> enderecos = new ArrayList<>();
         String sql = "SELECT * FROM T_ENDERECO";
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
-                Endereco endereco = new Endereco(
-                        rs.getInt("id"),
-                        rs.getInt("cep_endereco"),
-                        rs.getString("log_endereco"),
-                        rs.getInt("num_endereco"),
-                        rs.getString("bairro"),
-                        rs.getString("cidade"),
-                        rs.getString("estado"),
-                        null, // Cliente - você pode definir isso conforme necessário
-                        null // Oficina - você pode definir isso conforme necessário
-                );
+                Endereco endereco = mapResultSetToEndereco(rs);
                 enderecos.add(endereco);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return enderecos;
     }
 
     @Override
-    public void save(Endereco entity) {
-        String sql = "INSERT INTO T_ENDERECO (cep_endereco, log_endereco, num_endereco, cmpl_endereco, bairro, cidade, estado, fk_cliente, fk_oficina) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, entity.getCepEndereco());
-            stmt.setString(2, entity.getLogEndereco());
-            stmt.setInt(3, entity.getNumEndereco());
-            stmt.setNull(4, Types.VARCHAR); // Complemento do endereço
-            stmt.setString(5, entity.getBairro());
-            stmt.setString(6, entity.getCidade());
-            stmt.setString(7, entity.getEstado());
-            stmt.setNull(8, Types.INTEGER); // ID do cliente
-            stmt.setNull(9, Types.INTEGER); // ID da oficina
+    public void save(Endereco endereco) {
+        String sql = "INSERT INTO T_ENDERECO (cep_endereco, log_endereco, num_endereco, bairro, cidade, estado, fk_cliente, fk_oficina) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, endereco.getCepEndereco());
+            stmt.setString(2, endereco.getLogEndereco());
+            stmt.setInt(3, endereco.getNumEndereco());
+            stmt.setString(4, endereco.getBairro());
+            stmt.setString(5, endereco.getCidade());
+            stmt.setString(6, endereco.getEstado());
+            stmt.setInt(7, endereco.getCliente() != null ? endereco.getCliente().getId() : null);
+            stmt.setInt(8, endereco.getOficina() != null ? endereco.getOficina().getId() : null);
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,19 +74,22 @@ public class EnderecoRepo implements _EntidadeRepo<Endereco> {
     }
 
     @Override
-    public void update(Endereco entity) {
-        String sql = "UPDATE T_ENDERECO SET cep_endereco = ?, log_endereco = ?, num_endereco = ?, cmpl_endereco = ?, bairro = ?, cidade = ?, estado = ?, fk_cliente = ?, fk_oficina = ? WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, entity.getCepEndereco());
-            stmt.setString(2, entity.getLogEndereco());
-            stmt.setInt(3, entity.getNumEndereco());
-            stmt.setNull(4, Types.VARCHAR); // Complemento do endereço
-            stmt.setString(5, entity.getBairro());
-            stmt.setString(6, entity.getCidade());
-            stmt.setString(7, entity.getEstado());
-            stmt.setNull(8, Types.INTEGER); // ID do cliente
-            stmt.setNull(9, Types.INTEGER); // ID da oficina
-            stmt.setInt(10, entity.getId());
+    public void update(Endereco endereco) {
+        String sql = "UPDATE T_ENDERECO SET cep_endereco = ?, log_endereco = ?, num_endereco = ?, bairro = ?, cidade = ?, estado = ?, fk_cliente = ?, fk_oficina = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, endereco.getCepEndereco());
+            stmt.setString(2, endereco.getLogEndereco());
+            stmt.setInt(3, endereco.getNumEndereco());
+            stmt.setString(4, endereco.getBairro());
+            stmt.setString(5, endereco.getCidade());
+            stmt.setString(6, endereco.getEstado());
+            stmt.setInt(7, endereco.getCliente() != null ? endereco.getCliente().getId() : null);
+            stmt.setInt(8, endereco.getOficina() != null ? endereco.getOficina().getId() : null);
+            stmt.setInt(9, endereco.getId());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,11 +99,28 @@ public class EnderecoRepo implements _EntidadeRepo<Endereco> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM T_ENDERECO WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private Endereco mapResultSetToEndereco(ResultSet rs) throws SQLException {
+        int id = rs.getInt("id");
+        int cepEndereco = rs.getInt("cep_endereco");
+        String logEndereco = rs.getString("log_endereco");
+        int numEndereco = rs.getInt("num_endereco");
+        String bairro = rs.getString("bairro");
+        String cidade = rs.getString("cidade");
+        String estado = rs.getString("estado");
+
+        Endereco endereco = new Endereco(id, cepEndereco, logEndereco, numEndereco, bairro, cidade, estado, null, null);
+
+        return endereco;
     }
 }

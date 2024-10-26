@@ -1,10 +1,26 @@
 package org.example.entities;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "T_SERVICO")
 public class Servico extends _EntidadeBase {
+
+    @Column(name = "descricao", nullable = false)
     private String descricao;
+
+    @Column(name = "valor", nullable = false)
     private float valor;
+
+    @Column(name = "tempo_execucao", nullable = false)
     private String tempoExecucao;
+
+    @Enumerated(EnumType.STRING) // Mapeando a enumeração como uma string no banco de dados
+    @Column(name = "status_servico") // Aqui você pode adicionar a coluna correspondente ao status, se desejado
     private StatusServico statusServico;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_agendamento", nullable = false)
     private Agendamento agendamento;
 
     public Servico() {
@@ -27,6 +43,7 @@ public class Servico extends _EntidadeBase {
         this.agendamento = agendamento;
     }
 
+    // Getters e Setters
     public String getDescricao() {
         return descricao;
     }
@@ -66,4 +83,25 @@ public class Servico extends _EntidadeBase {
     public void setAgendamento(Agendamento agendamento) {
         this.agendamento = agendamento;
     }
+
+    public void confirmarServico() {
+        if (statusServico.isPendente()) {
+            this.statusServico = StatusServico.CONFIRMADO;
+        } else {
+            throw new IllegalStateException("Apenas serviços pendentes podem ser confirmados.");
+        }
+    }
+
+    public void iniciarServico() {
+        if (statusServico.podeIniciar()) {
+            this.statusServico = StatusServico.EM_ANDAMENTO;
+        } else {
+            throw new IllegalStateException("Serviço não pode ser iniciado no status atual.");
+        }
+    }
+
+    public String getDescricaoStatus() {
+        return statusServico.obterDescricaoStatus();
+    }
+
 }

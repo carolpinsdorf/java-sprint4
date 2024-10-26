@@ -1,9 +1,16 @@
 package org.example.entities;
 
-public class Dtc extends _EntidadeBase{
-    private String codDtc;
-    private String descricao;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "T_DTC")
+public class Dtc extends _EntidadeBase {
+
+    @Column(name = "cod_dtc", nullable = false, length = 5)
+    private String codDtc;
+
+    @Column(name = "descricao", nullable = false, columnDefinition = "LONG")
+    private String descricao;
 
     public Dtc() {
     }
@@ -19,6 +26,7 @@ public class Dtc extends _EntidadeBase{
         this.descricao = descricao;
     }
 
+    // Getters e Setters
     public String getCodDtc() {
         return codDtc;
     }
