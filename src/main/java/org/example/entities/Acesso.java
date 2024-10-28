@@ -1,10 +1,12 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = Acesso.TABLE_ENTIDADE)
@@ -24,6 +26,7 @@ public class Acesso extends _EntidadeBase {
     private String situacao;
 
     @Column(name = "data_cadastro")
+    @JsonbDateFormat("yyyy-MM-dd'Z'")
     private Date dataCadastro;
 
 
@@ -77,5 +80,28 @@ public class Acesso extends _EntidadeBase {
 
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    @Override
+    public String toString() {
+        return "Acesso{" +
+                "emailAcesso='" + emailAcesso + '\'' +
+                ", username='" + username + '\'' +
+                ", senha='" + senha + '\'' +
+                ", situacao='" + situacao + '\'' +
+                ", dataCadastro=" + dataCadastro +
+                '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Acesso)) return false;
+        Acesso acesso = (Acesso) o;
+        return getId() == acesso.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

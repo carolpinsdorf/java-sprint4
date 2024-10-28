@@ -104,4 +104,14 @@ public class Servico extends _EntidadeBase {
         return statusServico.obterDescricaoStatus();
     }
 
+    @Override
+    public String toString() {
+        return "Servico{" +
+                "descricao='" + descricao + '\'' +
+                ", valor=" + valor +
+                ", tempoExecucao='" + tempoExecucao + '\'' +
+                ", statusServico=" + statusServico +
+                ", agendamento=" + agendamento +
+                '}';
+    }
 }

@@ -55,7 +55,6 @@ public class Cliente extends _EntidadeBase {
         this.acesso = acesso;
     }
 
-    // Getters and setters
     public Long getCpfCliente() {
         return cpfCliente;
     }
@@ -110,5 +109,18 @@ public class Cliente extends _EntidadeBase {
 
     public void setAcesso(Acesso acesso) {
         this.acesso = acesso;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "cpfCliente=" + cpfCliente +
+                ", nomeCliente='" + nomeCliente + '\'' +
+                ", rgCliente='" + rgCliente + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", sexoCliente='" + sexoCliente + '\'' +
+                ", estadoCivil='" + estadoCivil + '\'' +
+                ", acesso=" + acesso +
+                '}';
     }
 }

@@ -36,7 +36,6 @@ public class Agendamento extends _EntidadeBase {
         this.carro = carro;
     }
 
-    // Construtor com ID
     public Agendamento(int id, Date dthoraAgendamento, String statusAgendamento, String obsAgendamento, Oficina oficina, Carro carro) {
         super(id);
         this.dthoraAgendamento = dthoraAgendamento;
@@ -46,7 +45,6 @@ public class Agendamento extends _EntidadeBase {
         this.carro = carro;
     }
 
-    // Getters e Setters
 
     public Date getDthoraAgendamento() {
         return dthoraAgendamento;
@@ -86,5 +84,16 @@ public class Agendamento extends _EntidadeBase {
 
     public void setCarro(Carro carro) {
         this.carro = carro;
+    }
+
+    @Override
+    public String toString() {
+        return "Agendamento{" +
+                "dthoraAgendamento=" + dthoraAgendamento +
+                ", statusAgendamento='" + statusAgendamento + '\'' +
+                ", obsAgendamento='" + obsAgendamento + '\'' +
+                ", oficina=" + oficina +
+                ", carro=" + carro +
+                '}';
     }
 }

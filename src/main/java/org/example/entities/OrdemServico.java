@@ -42,4 +42,12 @@ public class OrdemServico extends _EntidadeBase {
     public void setAgendamento(Agendamento agendamento) {
         this.agendamento = agendamento;
     }
+
+    @Override
+    public String toString() {
+        return "OrdemServico{" +
+                "statusServico='" + statusServico + '\'' +
+                ", agendamento=" + agendamento +
+                '}';
+    }
 }

@@ -42,5 +42,13 @@ public class Oficina extends _EntidadeBase {
     public void setAcesso(Acesso acesso) {
         this.acesso = acesso;
     }
+
+    @Override
+    public String toString() {
+        return "Oficina{" +
+                "cnpjOficina=" + cnpjOficina +
+                ", acesso=" + acesso +
+                '}';
+    }
 }
 

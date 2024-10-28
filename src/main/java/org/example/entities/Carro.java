@@ -140,4 +140,21 @@ public class Carro extends _EntidadeBase {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    @Override
+    public String toString() {
+        return "Carro{" +
+                "placa='" + placa + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", marca='" + marca + '\'' +
+                ", anoFabricacao=" + anoFabricacao +
+                ", torque=" + torque +
+                ", cambio='" + cambio + '\'' +
+                ", combustivel='" + combustivel + '\'' +
+                ", cor='" + cor + '\'' +
+                ", quilometragem=" + quilometragem +
+                ", cliente=" + cliente +
+                '}';
+    }
+
 }

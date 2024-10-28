@@ -42,5 +42,13 @@ public class Dtc extends _EntidadeBase {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "Dtc{" +
+                "codDtc='" + codDtc + '\'' +
+                ", descricao='" + descricao + '\'' +
+                '}';
+    }
 }
 

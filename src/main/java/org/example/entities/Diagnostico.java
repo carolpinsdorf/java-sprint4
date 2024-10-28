@@ -60,5 +60,14 @@ public class Diagnostico extends _EntidadeBase {
     public void setDtc(Dtc dtc) {
         this.dtc = dtc;
     }
+
+    @Override
+    public String toString() {
+        return "Diagnostico{" +
+                "descDiagnostico='" + descDiagnostico + '\'' +
+                ", servico=" + servico +
+                ", dtc=" + dtc +
+                '}';
+    }
 }
 

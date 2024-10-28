@@ -33,6 +33,7 @@ public enum StatusServico {
     public boolean podeIniciar() {
         return this == PENDENTE || this == CONFIRMADO; // Permite iniciar a partir de CONFIRMADO
     }
+
 }
 
 

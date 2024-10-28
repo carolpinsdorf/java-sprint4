@@ -35,7 +35,6 @@ public class Endereco extends _EntidadeBase {
     @JoinColumn(name = "fk_oficina")
     private Oficina oficina;
 
-    // Construtor padrão
     public Endereco() {
     }
 
@@ -138,5 +137,20 @@ public class Endereco extends _EntidadeBase {
 
     public void setOficina(Oficina oficina) {
         this.oficina = oficina;
+    }
+
+    @Override
+    public String toString() {
+        return "Endereco{" +
+                "cepEndereco=" + cepEndereco +
+                ", logEndereco='" + logEndereco + '\'' +
+                ", numEndereco=" + numEndereco +
+                ", cmplEndereco='" + cmplEndereco + '\'' +
+                ", bairro='" + bairro + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", estado='" + estado + '\'' +
+                ", cliente=" + cliente +
+                ", oficina=" + oficina +
+                '}';
     }
 }
