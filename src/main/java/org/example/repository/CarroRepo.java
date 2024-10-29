@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entities.Carro;
 import org.example.entities.Cliente;
 import org.example.exception.EntidadeNaoEncontradaException;
+import org.example.services.CarroValidator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,12 +18,16 @@ public class CarroRepo {
     private static final String SQL_DELETE = "DELETE FROM T_CARRO WHERE id = ?";
 
     private Connection connection;
+    private final CarroValidator validador;
 
     public CarroRepo(Connection connection) {
         this.connection = connection;
+        this.validador = new CarroValidator();
     }
 
     public void cadastrar(Carro carro) throws SQLException {
+        validarDadosCarro(carro);
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preencherStatement(carro, stm);
             stm.executeUpdate();
@@ -33,9 +38,12 @@ public class CarroRepo {
                 }
             }
         }
+        validador.adicionarPlacaExistente(carro.getPlaca());
     }
 
     public void atualizar(Carro carro) throws SQLException, EntidadeNaoEncontradaException {
+        validarDadosCarro(carro);
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_UPDATE)) {
             preencherStatement(carro, stm);
             stm.setInt(11, carro.getId());
@@ -99,7 +107,6 @@ public class CarroRepo {
         return carro;
     }
 
-
     private static void preencherStatement(Carro carro, PreparedStatement stm) throws SQLException {
         stm.setString(1, carro.getPlaca());
         stm.setString(2, carro.getModelo());
@@ -129,4 +136,13 @@ public class CarroRepo {
         }
     }
 
+    private void validarDadosCarro(Carro carro) {
+        if (!validador.validaCampoObg(carro.getModelo()) ||
+                !validador.validaCampoObg(carro.getMarca()) ||
+                !validador.validaAno(carro.getAnoFabricacao()) ||
+                !validador.validaNumPositivo(carro.getTorque() != null ? carro.getTorque() : 0) ||
+                !validador.validaPlaca(carro.getPlaca())) {
+            throw new IllegalArgumentException("Dados inválidos para o carro.");
+        }
+    }
 }

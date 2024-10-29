@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entities.Acesso;
 import org.example.entities.Cliente;
 import org.example.exception.EntidadeNaoEncontradaException;
+import org.example.services.ClienteValidator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,13 +19,17 @@ public class ClienteRepo {
             "dt_nascimento = ?, sx_cliente = ?, estado_civil = ?, fk_acesso = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM T_CLIENTE WHERE id = ?";
 
-    private Connection connection;
+    private final Connection connection;
+    private final ClienteValidator validador;
 
     public ClienteRepo(Connection connection) {
         this.connection = connection;
+        this.validador = new ClienteValidator();
     }
 
     public void cadastrar(Cliente cliente) throws SQLException {
+        validarDadosCliente(cliente);
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preencherStatement(cliente, stm);
             stm.executeUpdate();
@@ -35,9 +40,12 @@ public class ClienteRepo {
                 }
             }
         }
+        validador.adicionarCpfExistente(cliente.getCpfCliente());
     }
 
     public void atualizar(Cliente cliente) throws SQLException, EntidadeNaoEncontradaException {
+        validarDadosCliente(cliente);
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_UPDATE)) {
             preencherStatement(cliente, stm);
             stm.setInt(8, cliente.getId());
@@ -93,7 +101,6 @@ public class ClienteRepo {
 
         Acesso acesso = new Acesso();
         acesso.setId(resultSet.getInt("fk_acesso"));
-
         cliente.setAcesso(acesso);
 
         return cliente;
@@ -107,11 +114,20 @@ public class ClienteRepo {
         if (cliente.getDataNascimento() != null) {
             stm.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTime()));
         } else {
-            stm.setDate(4, new java.sql.Date(new java.util.Date().getTime())); // Define a data atual como fallback
+            stm.setDate(4, new java.sql.Date(new java.util.Date().getTime()));
         }
 
         stm.setString(5, cliente.getSexoCliente());
         stm.setString(6, cliente.getEstadoCivil());
         stm.setInt(7, cliente.getAcesso().getId());
+    }
+
+    private void validarDadosCliente(Cliente cliente) {
+        if (!validador.validaCampoObg(cliente.getNomeCliente()) ||
+                !validador.validaCampoObg(cliente.getRgCliente()) ||
+                !validador.validaCpf(cliente.getCpfCliente()) ||
+                !validador.validaMaiorDeIdade(cliente.getDataNascimento().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate())) {
+            throw new IllegalArgumentException("Dados inválidos para o cliente.");
+        }
     }
 }

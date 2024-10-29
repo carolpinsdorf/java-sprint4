@@ -1,8 +1,9 @@
 package org.example.repository;
 
-import org.example.entities.Oficina;
 import org.example.entities.Acesso;
+import org.example.entities.Oficina;
 import org.example.exception.EntidadeNaoEncontradaException;
+import org.example.services.OficinaValidator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,16 +17,19 @@ public class OficinaRepo {
     private static final String SQL_UPDATE = "UPDATE T_OFICINA SET cnpj_oficina = ?, fk_acesso = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM T_OFICINA WHERE id = ?";
 
-    private Connection connection;
+    private final Connection connection;
+    private final OficinaValidator validador;
 
     public OficinaRepo(Connection connection) {
         this.connection = connection;
+        this.validador = new OficinaValidator();
     }
 
     public void cadastrar(Oficina oficina) throws SQLException {
+        validarDadosOficina(oficina);  // Validação antes de inserir
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stm.setLong(1, oficina.getCnpjOficina());
-            stm.setInt(2, oficina.getAcesso().getId());
+            preencherStatement(oficina, stm);
             stm.executeUpdate();
 
             try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
@@ -34,12 +38,14 @@ public class OficinaRepo {
                 }
             }
         }
+        validador.adicionarCnpjExistente(oficina.getCnpjOficina());
     }
 
     public void atualizar(Oficina oficina) throws SQLException, EntidadeNaoEncontradaException {
+        validarDadosOficina(oficina);
+
         try (PreparedStatement stm = connection.prepareStatement(SQL_UPDATE)) {
-            stm.setLong(1, oficina.getCnpjOficina());
-            stm.setInt(2, oficina.getAcesso().getId());
+            preencherStatement(oficina, stm);
             stm.setInt(3, oficina.getId());
 
             if (stm.executeUpdate() == 0) {
@@ -92,5 +98,16 @@ public class OficinaRepo {
         oficina.setAcesso(acesso);
 
         return oficina;
+    }
+
+    private static void preencherStatement(Oficina oficina, PreparedStatement stm) throws SQLException {
+        stm.setLong(1, oficina.getCnpjOficina());
+        stm.setInt(2, oficina.getAcesso().getId());
+    }
+
+    private void validarDadosOficina(Oficina oficina) {
+        if (!validador.validaCnpj(oficina.getCnpjOficina())) {
+            throw new IllegalArgumentException("CNPJ inválido ou já existente.");
+        }
     }
 }

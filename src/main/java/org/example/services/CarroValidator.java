@@ -11,7 +11,6 @@ public class CarroValidator extends _BaseEntityValidatorImpl<Carro> {
 
     private static final String REGEX_PLACA = "^[A-Z]{3}\\d{4}$|^[A-Z]{3}\\d[A-Z]\\d{2}$";
 
-    // Método para validar a placa (verifica se a placa já existe e se é válida via regex)
     public boolean validaPlaca(String placa) {
         if (placa == null || !placa.matches(REGEX_PLACA)) {
             return false;

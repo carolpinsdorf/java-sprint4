@@ -59,7 +59,7 @@ public class AgendamentoResource {
     @GET
     public List<Agendamento> listar() {
         try {
-            return agendamentoRepo.listar();
+            return agendamentoRepo.listarComOficinaCarro();
         } catch (SQLException e) {
             throw new WebApplicationException("Erro ao listar os agendamentos.", Response.Status.INTERNAL_SERVER_ERROR);
         }
