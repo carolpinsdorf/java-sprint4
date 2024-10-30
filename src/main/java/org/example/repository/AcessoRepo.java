@@ -26,9 +26,12 @@ public class AcessoRepo {
     }
 
     public void cadastrar(Acesso acesso) throws SQLException {
+        System.out.println("Iniciando validação do acesso");
         if (!acessoValidator.validarAcesso(acesso)) {
+            System.out.println("Falha na validação");
             throw new IllegalArgumentException("Dados de acesso inválidos");
         }
+        System.out.println("Validação OK, tentando inserir no banco");
 
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             if (acesso.getDataCadastro() == null) {
@@ -37,14 +40,6 @@ public class AcessoRepo {
 
             preencherStatement(acesso, stm);
             stm.executeUpdate();
-
-            try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    acesso.setId(generatedKeys.getInt(1));
-                }
-            }
-
-            acessoValidator.adicionarAcessoExistente(acesso.getEmailAcesso(), acesso.getUsername());
         }
     }
 

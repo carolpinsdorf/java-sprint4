@@ -31,6 +31,7 @@ public class ClienteValidator extends _BaseEntityValidatorImpl<Cliente> {
 
     public boolean validarCliente(Cliente cliente) {
         return validaCpf(cliente.getCpfCliente()) &&
-                validaMaiorDeIdade(cliente.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                validaMaiorDeIdade(cliente.getDataNascimento()); // Passa LocalDate diretamente
     }
+
 }

@@ -10,12 +10,10 @@ public class OficinaValidator extends _BaseEntityValidatorImpl<Oficina> {
 
     private final Set<Long> cnpjsExistentes = new HashSet<>();
 
-    // Regex para validar CNPJ
-    private static final String CNPJ_REGEX = "^(\\d{14})$"; // Aceita apenas números e verifica se tem 14 dígitos
+    private static final String CNPJ_REGEX = "^(\\d{14})$";
 
     public boolean validaCnpj(long cnpj) {
         String cnpjStr = String.valueOf(cnpj);
-        // Verifica o comprimento e o padrão
         if (cnpjStr.length() != 14 || !Pattern.matches(CNPJ_REGEX, cnpjStr)) return false;
         return !cnpjsExistentes.contains(cnpj);
     }

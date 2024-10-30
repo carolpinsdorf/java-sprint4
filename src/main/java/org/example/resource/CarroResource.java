@@ -83,13 +83,15 @@ public class CarroResource {
     @Path("{id}")
     public void remover(@PathParam("id") int id) {
         try {
+            System.out.println("Tentando remover carro com ID: " + id); // Log
             carroRepo.remover(id);
         } catch (EntidadeNaoEncontradaException e) {
             throw new WebApplicationException("Carro não encontrado.", Response.Status.NOT_FOUND);
         } catch (SQLException e) {
-            throw new WebApplicationException("Erro ao remover o carro.", Response.Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException("Erro ao remover o carro: " + e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PreDestroy
     private void fecharConexao() {

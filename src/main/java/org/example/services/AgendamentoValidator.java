@@ -4,6 +4,9 @@ import org.example.entities.Agendamento;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class AgendamentoValidator extends _BaseEntityValidatorImpl<Agendamento> {
@@ -13,15 +16,14 @@ public class AgendamentoValidator extends _BaseEntityValidatorImpl<Agendamento> 
             return false;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        sdf.setLenient(false);
         try {
-            sdf.parse(data);
+            LocalDate.parse(data, DateTimeFormatter.ISO_DATE_TIME);
             return true;
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             return false;
         }
     }
+
 
     public boolean validaHora(String hora) {
         if (hora == null || hora.trim().isEmpty()) {

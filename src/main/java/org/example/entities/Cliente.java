@@ -1,6 +1,9 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,8 +20,8 @@ public class Cliente extends _EntidadeBase {
     private String rgCliente;
 
     @Column(name = "dt_nascimento", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dataNascimento;
+    @JsonbDateFormat("yyyy-MM-dd")  // Formato para a data
+    private LocalDate dataNascimento;
 
     @Column(name = "sx_cliente", length = 20)
     private String sexoCliente;
@@ -34,7 +37,7 @@ public class Cliente extends _EntidadeBase {
     public Cliente() {
     }
 
-    public Cliente(Long cpfCliente, String nomeCliente, String rgCliente, Date dataNascimento, String sexoCliente, String estadoCivil, Acesso acesso) {
+    public Cliente(Long cpfCliente, String nomeCliente, String rgCliente, LocalDate dataNascimento, String sexoCliente, String estadoCivil, Acesso acesso) {
         this.cpfCliente = cpfCliente;
         this.nomeCliente = nomeCliente;
         this.rgCliente = rgCliente;
@@ -44,7 +47,7 @@ public class Cliente extends _EntidadeBase {
         this.acesso = acesso;
     }
 
-    public Cliente(int id, Long cpfCliente, String nomeCliente, String rgCliente, Date dataNascimento, String sexoCliente, String estadoCivil, Acesso acesso) {
+    public Cliente(int id, Long cpfCliente, String nomeCliente, String rgCliente, LocalDate dataNascimento, String sexoCliente, String estadoCivil, Acesso acesso) {
         super(id);
         this.cpfCliente = cpfCliente;
         this.nomeCliente = nomeCliente;
@@ -79,11 +82,11 @@ public class Cliente extends _EntidadeBase {
         this.rgCliente = rgCliente;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

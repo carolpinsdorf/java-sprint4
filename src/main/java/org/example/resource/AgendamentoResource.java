@@ -46,15 +46,21 @@ public class AgendamentoResource {
 
     @GET
     @Path("{id}")
-    public Agendamento buscar(@PathParam("id") Integer id) {
+    public Response buscar(@PathParam("id") Integer id) {
         try {
-            return agendamentoRepo.pesquisarPorId(id);
+            Agendamento agendamento = agendamentoRepo.pesquisarPorId(id);
+            return Response.ok(agendamento).build();
         } catch (EntidadeNaoEncontradaException e) {
-            throw new WebApplicationException("Agendamento não encontrado.", Response.Status.NOT_FOUND);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Agendamento não encontrado.")
+                    .build();
         } catch (SQLException e) {
-            throw new WebApplicationException("Erro ao buscar o agendamento.", Response.Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar o agendamento.")
+                    .build();
         }
     }
+
 
     @GET
     public List<Agendamento> listar() {

@@ -1,15 +1,18 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "T_AGENDAMENTO")
 public class Agendamento extends _EntidadeBase {
 
+    @JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(name = "dthora_agendamento", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dthoraAgendamento;
+    private LocalDateTime dthoraAgendamento;
 
     @Column(name = "status_agendamento", nullable = false, length = 10)
     private String statusAgendamento;
@@ -28,7 +31,7 @@ public class Agendamento extends _EntidadeBase {
     public Agendamento() {
     }
 
-    public Agendamento(Date dthoraAgendamento, String statusAgendamento, String obsAgendamento, Oficina oficina, Carro carro) {
+    public Agendamento(LocalDateTime dthoraAgendamento, String statusAgendamento, String obsAgendamento, Oficina oficina, Carro carro) {
         this.dthoraAgendamento = dthoraAgendamento;
         this.statusAgendamento = statusAgendamento;
         this.obsAgendamento = obsAgendamento;
@@ -36,7 +39,7 @@ public class Agendamento extends _EntidadeBase {
         this.carro = carro;
     }
 
-    public Agendamento(int id, Date dthoraAgendamento, String statusAgendamento, String obsAgendamento, Oficina oficina, Carro carro) {
+    public Agendamento(int id, LocalDateTime dthoraAgendamento, String statusAgendamento, String obsAgendamento, Oficina oficina, Carro carro) {
         super(id);
         this.dthoraAgendamento = dthoraAgendamento;
         this.statusAgendamento = statusAgendamento;
@@ -45,12 +48,11 @@ public class Agendamento extends _EntidadeBase {
         this.carro = carro;
     }
 
-
-    public Date getDthoraAgendamento() {
+    public LocalDateTime getDthoraAgendamento() {
         return dthoraAgendamento;
     }
 
-    public void setDthoraAgendamento(Date dthoraAgendamento) {
+    public void setDthoraAgendamento(LocalDateTime dthoraAgendamento) {
         this.dthoraAgendamento = dthoraAgendamento;
     }
 

@@ -24,7 +24,6 @@ public class Main {
         final ResourceConfig rc = new ResourceConfig().packages("br.com.gaid");
         rc.register(JsonBindingFeature.class);
         rc.register(CorsFilter.class);
-
         rc.register(AcessoResource.class);
         rc.register(ClienteResource.class);
         rc.register(OficinaResource.class);

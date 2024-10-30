@@ -7,6 +7,8 @@ import org.example.exception.EntidadeNaoEncontradaException;
 import org.example.services.AgendamentoValidator;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class AgendamentoRepo {
             "a.status_agendamento, " +
             "a.obs_agendamento, " +
             "o.id AS oficina_id, " +
-            "o.cnpj_oficina AS cnpj, " +
+            "o.cnpj_oficina AS cnpj_oficina, " +
             "c.id AS carro_id, " +
             "c.ano_fabricacao AS ano_fabricacao " +
             "FROM T_AGENDAMENTO a " +
@@ -111,17 +113,21 @@ public class AgendamentoRepo {
     private static Agendamento parseAgendamento(ResultSet resultSet) throws SQLException {
         Agendamento agendamento = new Agendamento();
         agendamento.setId(resultSet.getInt("id"));
-        agendamento.setDthoraAgendamento(resultSet.getDate("dthora_agendamento"));
+
+        // Converter ResultSet para LocalDateTime
+        Timestamp timestamp = resultSet.getTimestamp("dthora_agendamento");
+        if (timestamp != null) {
+            agendamento.setDthoraAgendamento(timestamp.toLocalDateTime());
+        }
+
         agendamento.setStatusAgendamento(resultSet.getString("status_agendamento"));
         agendamento.setObsAgendamento(resultSet.getString("obs_agendamento"));
 
-        // Configurando a oficina
         Oficina oficina = new Oficina();
         oficina.setId(resultSet.getInt("oficina_id"));
-        oficina.setCnpjOficina(resultSet.getLong("cnpj"));  // Correspondente ao alias 'cnpj'
+        oficina.setCnpjOficina(resultSet.getLong("cnpj_oficina"));
         agendamento.setOficina(oficina);
 
-        // Configurando o carro
         Carro carro = new Carro();
         carro.setId(resultSet.getInt("carro_id"));
         carro.setAnoFabricacao(resultSet.getInt("ano_fabricacao"));
@@ -130,9 +136,9 @@ public class AgendamentoRepo {
         return agendamento;
     }
 
-
     private static void preencherStatement(Agendamento agendamento, PreparedStatement stm) throws SQLException {
-        stm.setDate(1, new java.sql.Date(agendamento.getDthoraAgendamento().getTime()));
+        // Usar Timestamp para LocalDateTime
+        stm.setTimestamp(1, Timestamp.valueOf(agendamento.getDthoraAgendamento()));
         stm.setString(2, agendamento.getStatusAgendamento());
         stm.setString(3, agendamento.getObsAgendamento());
         stm.setInt(4, agendamento.getOficina().getId());

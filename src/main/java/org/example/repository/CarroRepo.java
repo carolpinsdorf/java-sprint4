@@ -79,13 +79,21 @@ public class CarroRepo {
     }
 
     public void remover(int id) throws SQLException, EntidadeNaoEncontradaException {
+        System.out.println("Verificando se o carro existe antes de remover.");
+        pesquisarPorId(id); // Lança exceção se não encontrar
+
+        System.out.println("Carro encontrado. Preparando para remover.");
         try (PreparedStatement stm = connection.prepareStatement(SQL_DELETE)) {
             stm.setInt(1, id);
-            if (stm.executeUpdate() == 0) {
+            int affectedRows = stm.executeUpdate();
+            System.out.println("Linhas afetadas pela remoção: " + affectedRows); // Log da quantidade de linhas afetadas
+            if (affectedRows == 0) {
                 throw new EntidadeNaoEncontradaException("Carro não encontrado para remoção");
             }
         }
     }
+
+
 
     private static Carro parseCarro(ResultSet resultSet) throws SQLException {
         Carro carro = new Carro();

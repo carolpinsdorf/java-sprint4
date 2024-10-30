@@ -6,6 +6,7 @@ import org.example.exception.EntidadeNaoEncontradaException;
 import org.example.services.ClienteValidator;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +96,10 @@ public class ClienteRepo {
         cliente.setCpfCliente(resultSet.getLong("cpf_cliente"));
         cliente.setNomeCliente(resultSet.getString("nm_cliente"));
         cliente.setRgCliente(resultSet.getString("rg_cliente"));
-        cliente.setDataNascimento(resultSet.getDate("dt_nascimento"));
+
+        // Obter LocalDate diretamente
+        cliente.setDataNascimento(resultSet.getObject("dt_nascimento", LocalDate.class));
+
         cliente.setSexoCliente(resultSet.getString("sx_cliente"));
         cliente.setEstadoCivil(resultSet.getString("estado_civil"));
 
@@ -106,15 +110,17 @@ public class ClienteRepo {
         return cliente;
     }
 
+
     private static void preencherStatement(Cliente cliente, PreparedStatement stm) throws SQLException {
         stm.setLong(1, cliente.getCpfCliente());
         stm.setString(2, cliente.getNomeCliente());
         stm.setString(3, cliente.getRgCliente());
 
+        // Converte LocalDate para java.sql.Date
         if (cliente.getDataNascimento() != null) {
-            stm.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTime()));
+            stm.setDate(4, java.sql.Date.valueOf(cliente.getDataNascimento()));
         } else {
-            stm.setDate(4, new java.sql.Date(new java.util.Date().getTime()));
+            stm.setDate(4, java.sql.Date.valueOf(LocalDate.now()));
         }
 
         stm.setString(5, cliente.getSexoCliente());
@@ -122,12 +128,14 @@ public class ClienteRepo {
         stm.setInt(7, cliente.getAcesso().getId());
     }
 
+
     private void validarDadosCliente(Cliente cliente) {
         if (!validador.validaCampoObg(cliente.getNomeCliente()) ||
                 !validador.validaCampoObg(cliente.getRgCliente()) ||
                 !validador.validaCpf(cliente.getCpfCliente()) ||
-                !validador.validaMaiorDeIdade(cliente.getDataNascimento().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate())) {
+                !validador.validaMaiorDeIdade(cliente.getDataNascimento())) {
             throw new IllegalArgumentException("Dados inválidos para o cliente.");
         }
     }
+
 }
