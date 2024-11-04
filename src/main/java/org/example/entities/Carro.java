@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
@@ -37,11 +38,9 @@ public class Carro extends _EntidadeBase {
     @JoinColumn(name = "fk_cliente")
     private Cliente cliente;
 
-    // Construtor padrão
     public Carro() {
     }
 
-    // Construtor com parâmetros sem o ID
     public Carro(String placa, String modelo, String marca, int anoFabricacao, Cliente cliente) {
         this.placa = placa;
         this.modelo = modelo;
@@ -156,5 +155,26 @@ public class Carro extends _EntidadeBase {
                 ", cliente=" + cliente +
                 '}';
     }
+    public boolean atualizarQuilometragem(int novaQuilometragem) {
+        if (novaQuilometragem > (this.quilometragem != null ? this.quilometragem : 0)) {
+            this.quilometragem = novaQuilometragem;
+            return true;
+        }
+        return false;
+    }
+    public boolean isEletrico() {
+        return this.combustivel != null && this.combustivel.equalsIgnoreCase("Elétrico");
+    }
+    public String exibirDetalhesCompletos() {
+        return String.format("Placa: %s\nModelo: %s\nMarca: %s\nAno de Fabricação: %d\nTorque: %s\nCâmbio: %s\nCombustível: %s\nCor: %s\nQuilometragem: %s\nCliente: %s",
+                placa, modelo, marca, anoFabricacao,
+                torque != null ? torque + " Nm" : "Não especificado",
+                cambio != null ? cambio : "Não especificado",
+                combustivel != null ? combustivel : "Não especificado",
+                cor != null ? cor : "Não especificado",
+                quilometragem != null ? quilometragem + " km" : "Não especificado",
+                cliente != null ? cliente.getId() : "Não especificado");
+    }
+
 
 }

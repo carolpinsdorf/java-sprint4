@@ -29,9 +29,7 @@ public class AcessoValidator extends _BaseEntityValidatorImpl<Acesso> {
         return validaCampoObg(senha) && senha.length() > 10;
     }
 
-    public boolean validaSituacao(String situacao) {
-        return situacao == null || situacao.equals("ativo") || situacao.equals("desativado");
-    }
+
 
     public void adicionarAcessoExistente(String email, String username) {
         emailsExistentes.add(email);
@@ -41,7 +39,6 @@ public class AcessoValidator extends _BaseEntityValidatorImpl<Acesso> {
     public boolean validarAcesso(Acesso acesso) {
         return validaEmail(acesso.getEmailAcesso()) &&
                 validaUsername(acesso.getUsername()) &&
-                validaSenha(acesso.getSenha()) &&
-                validaSituacao(acesso.getSituacao());
+                validaSenha(acesso.getSenha());
     }
 }

@@ -6,14 +6,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.example.entities.Acesso;
 import org.example.exception.EntidadeNaoEncontradaException;
-import org.example.repository.AcessoRepo;
-import org.example.factory.ConnectionFactory;
+import org.example.repositories.AcessoRepo;
+import org.example.infrastructure.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 @Path("acessos")

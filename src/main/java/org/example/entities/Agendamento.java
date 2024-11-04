@@ -98,4 +98,20 @@ public class Agendamento extends _EntidadeBase {
                 ", carro=" + carro +
                 '}';
     }
+    public void cancelarAgendamento(String motivoCancelamento) {
+        this.statusAgendamento = "cancelado";
+        this.obsAgendamento = (obsAgendamento == null ? "" : obsAgendamento + "\n") +
+                "Cancelado em: " + LocalDateTime.now() +
+                " - Motivo: " + motivoCancelamento;
+    }
+
+    public boolean reagendar(LocalDateTime novaDataHora) {
+        if (novaDataHora.isAfter(LocalDateTime.now())) {
+            this.dthoraAgendamento = novaDataHora;
+            this.statusAgendamento = "reagendado";
+            return true;
+        }
+        return false;
+    }
+
 }

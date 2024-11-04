@@ -6,8 +6,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.example.entities.Agendamento;
 import org.example.exception.EntidadeNaoEncontradaException;
-import org.example.repository.AgendamentoRepo;
-import org.example.factory.ConnectionFactory;
+import org.example.repositories.AgendamentoRepo;
+import org.example.infrastructure.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -65,7 +65,7 @@ public class AgendamentoResource {
     @GET
     public List<Agendamento> listar() {
         try {
-            return agendamentoRepo.listarComOficinaCarro();
+            return agendamentoRepo.listar();
         } catch (SQLException e) {
             throw new WebApplicationException("Erro ao listar os agendamentos.", Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -87,15 +87,21 @@ public class AgendamentoResource {
 
     @DELETE
     @Path("{id}")
-    public void remover(@PathParam("id") int id) {
+    public Response remover(@PathParam("id") int id) {
         try {
             agendamentoRepo.remover(id);
+            return Response.noContent().build();
         } catch (EntidadeNaoEncontradaException e) {
-            throw new WebApplicationException("Agendamento não encontrado.", Response.Status.NOT_FOUND);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Agendamento não encontrado.")
+                    .build();
         } catch (SQLException e) {
-            throw new WebApplicationException("Erro ao remover o agendamento.", Response.Status.INTERNAL_SERVER_ERROR);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao remover o agendamento.")
+                    .build();
         }
     }
+
 
     @PreDestroy
     private void fecharConexao() {

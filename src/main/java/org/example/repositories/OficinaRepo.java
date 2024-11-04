@@ -1,9 +1,10 @@
-package org.example.repository;
+package org.example.repositories;
 
 import org.example.entities.Acesso;
 import org.example.entities.Oficina;
 import org.example.exception.EntidadeNaoEncontradaException;
 import org.example.services.OficinaValidator;
+import org.example.infrastructure.Log4jLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class OficinaRepo {
 
     private final Connection connection;
     private final OficinaValidator validador;
+    private static final Log4jLogger logger = new Log4jLogger(OficinaRepo.class);
 
     public OficinaRepo(Connection connection) {
         this.connection = connection;
@@ -26,7 +28,8 @@ public class OficinaRepo {
     }
 
     public void cadastrar(Oficina oficina) throws SQLException {
-        validarDadosOficina(oficina);  // Validação antes de inserir
+        validarDadosOficina(oficina);
+        logger.info("Cadastrando nova oficina com CNPJ: " + oficina.getCnpjOficina());
 
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preencherStatement(oficina, stm);
@@ -44,6 +47,7 @@ public class OficinaRepo {
     public void atualizar(Oficina oficina) throws SQLException, EntidadeNaoEncontradaException {
         validarDadosOficina(oficina);
 
+        logger.info("Atualizando oficina com ID: " + oficina.getId());
         try (PreparedStatement stm = connection.prepareStatement(SQL_UPDATE)) {
             preencherStatement(oficina, stm);
             stm.setInt(3, oficina.getId());
@@ -56,6 +60,7 @@ public class OficinaRepo {
 
     public List<Oficina> listar() throws SQLException {
         List<Oficina> lista = new ArrayList<>();
+        logger.info("Listando todas as oficinas");
         try (PreparedStatement stm = connection.prepareStatement(SQL_SELECT_ALL);
              ResultSet resultSet = stm.executeQuery()) {
             while (resultSet.next()) {
@@ -67,6 +72,7 @@ public class OficinaRepo {
     }
 
     public Oficina pesquisarPorId(int id) throws SQLException, EntidadeNaoEncontradaException {
+        logger.info("Pesquisando oficina com ID: " + id);
         try (PreparedStatement stm = connection.prepareStatement(SQL_SELECT_BY_ID)) {
             stm.setInt(1, id);
             try (ResultSet resultSet = stm.executeQuery()) {
@@ -80,6 +86,7 @@ public class OficinaRepo {
     }
 
     public void remover(int id) throws SQLException, EntidadeNaoEncontradaException {
+        logger.info("Removendo oficina com ID: " + id);
         try (PreparedStatement stm = connection.prepareStatement(SQL_DELETE)) {
             stm.setInt(1, id);
             if (stm.executeUpdate() == 0) {

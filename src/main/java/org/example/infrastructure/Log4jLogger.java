@@ -11,7 +11,6 @@ public class Log4jLogger {
         logger = LogManager.getLogger(clazz);
     }
 
-    // Métodos para diferentes níveis de log
     public void info(String message) {
         logger.info(message);
     }

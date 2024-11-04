@@ -6,8 +6,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.example.entities.Carro;
 import org.example.exception.EntidadeNaoEncontradaException;
-import org.example.repository.CarroRepo;
-import org.example.factory.ConnectionFactory;
+import org.example.repositories.CarroRepo;
+import org.example.infrastructure.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;

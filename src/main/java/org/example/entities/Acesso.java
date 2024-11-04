@@ -4,7 +4,11 @@ import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 
@@ -103,5 +107,24 @@ public class Acesso extends _EntidadeBase {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+    public void redefinirSenha(String novaSenha) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(novaSenha.getBytes());
+            StringBuilder senhaCriptografada = new StringBuilder();
+            for (byte b : hash) {
+                senhaCriptografada.append(String.format("%02x", b));
+            }
+            this.senha = senhaCriptografada.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public long calcularDiasDesdeCadastro() {
+        LocalDate dataCadastroLocal = this.dataCadastro.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dataAtual = LocalDate.now();
+        return ChronoUnit.DAYS.between(dataCadastroLocal, dataAtual);
     }
 }

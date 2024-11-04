@@ -16,17 +16,17 @@ public class Cliente extends _EntidadeBase {
     @Column(name = "nm_cliente", nullable = false, length = 100)
     private String nomeCliente;
 
-    @Column(name = "rg_cliente", length = 10)
+    @Column(name = "rg_cliente", nullable = true, length = 20)
     private String rgCliente;
 
     @Column(name = "dt_nascimento", nullable = false)
-    @JsonbDateFormat("yyyy-MM-dd")  // Formato para a data
+    @JsonbDateFormat("yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-    @Column(name = "sx_cliente", length = 20)
+    @Column(name = "sx_cliente", nullable = true, length = 10)
     private String sexoCliente;
 
-    @Column(name = "estado_civil", length = 20)
+    @Column(name = "estado_civil", nullable = true, length = 15)
     private String estadoCivil;
 
     @ManyToOne

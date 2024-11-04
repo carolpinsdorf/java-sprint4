@@ -15,8 +15,8 @@ public class Servico extends _EntidadeBase {
     @Column(name = "tempo_execucao", nullable = false)
     private String tempoExecucao;
 
-    @Enumerated(EnumType.STRING) // Mapeando a enumeração como uma string no banco de dados
-    @Column(name = "status_servico") // Aqui você pode adicionar a coluna correspondente ao status, se desejado
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_servico")
     private StatusServico statusServico;
 
     @ManyToOne
@@ -114,4 +114,23 @@ public class Servico extends _EntidadeBase {
                 ", agendamento=" + agendamento +
                 '}';
     }
+    public void finalizarServico() {
+        if (statusServico == StatusServico.EM_ANDAMENTO) {
+            this.statusServico = StatusServico.CONCLUIDO;
+        } else {
+            throw new IllegalStateException("Serviço só pode ser finalizado se estiver em andamento.");
+        }
+    }
+    public boolean isServicoConcluido() {
+        return statusServico == StatusServico.CONCLUIDO;
+    }
+    public float calcularPrecoComDesconto(float percentualDesconto) {
+        if (percentualDesconto < 0 || percentualDesconto > 100) {
+            throw new IllegalArgumentException("Percentual de desconto deve estar entre 0 e 100.");
+        }
+        return valor - (valor * percentualDesconto / 100);
+    }
+
+
+
 }

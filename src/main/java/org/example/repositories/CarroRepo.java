@@ -1,9 +1,10 @@
-package org.example.repository;
+package org.example.repositories;
 
 import org.example.entities.Carro;
 import org.example.entities.Cliente;
 import org.example.exception.EntidadeNaoEncontradaException;
 import org.example.services.CarroValidator;
+import org.example.infrastructure.Log4jLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class CarroRepo {
 
     private Connection connection;
     private final CarroValidator validador;
+    private final Log4jLogger logger = new Log4jLogger(CarroRepo.class);
 
     public CarroRepo(Connection connection) {
         this.connection = connection;
@@ -27,6 +29,7 @@ public class CarroRepo {
 
     public void cadastrar(Carro carro) throws SQLException {
         validarDadosCarro(carro);
+        logger.info("Iniciando o cadastro do carro: " + carro);
 
         try (PreparedStatement stm = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preencherStatement(carro, stm);
@@ -35,6 +38,7 @@ public class CarroRepo {
             try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     carro.setId(generatedKeys.getInt(1));
+                    logger.info("Carro cadastrado com sucesso, ID gerado: " + carro.getId());
                 }
             }
         }
@@ -44,16 +48,19 @@ public class CarroRepo {
     public void atualizar(Carro carro) throws SQLException, EntidadeNaoEncontradaException {
         validarDadosCarro(carro);
 
+        logger.info("Iniciando a atualização do carro com ID: " + carro.getId());
         try (PreparedStatement stm = connection.prepareStatement(SQL_UPDATE)) {
             preencherStatement(carro, stm);
             stm.setInt(11, carro.getId());
             if (stm.executeUpdate() == 0) {
                 throw new EntidadeNaoEncontradaException("Carro não encontrado para atualização");
             }
+            logger.info("Carro atualizado com sucesso, ID: " + carro.getId());
         }
     }
 
     public List<Carro> listar() throws SQLException {
+        logger.info("Listando todos os carros...");
         List<Carro> lista = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(SQL_SELECT_ALL);
              ResultSet resultSet = stm.executeQuery()) {
@@ -61,15 +68,18 @@ public class CarroRepo {
                 Carro carro = parseCarro(resultSet);
                 lista.add(carro);
             }
+            logger.info("Listagem de carros concluída com sucesso. Total de carros: " + lista.size());
         }
         return lista;
     }
 
     public Carro pesquisarPorId(int id) throws SQLException, EntidadeNaoEncontradaException {
+        logger.info("Pesquisando carro por ID: " + id);
         try (PreparedStatement stm = connection.prepareStatement(SQL_SELECT_BY_ID)) {
             stm.setInt(1, id);
             try (ResultSet resultSet = stm.executeQuery()) {
                 if (resultSet.next()) {
+                    logger.info("Carro encontrado com ID: " + id);
                     return parseCarro(resultSet);
                 } else {
                     throw new EntidadeNaoEncontradaException("Carro não encontrado");
@@ -79,17 +89,18 @@ public class CarroRepo {
     }
 
     public void remover(int id) throws SQLException, EntidadeNaoEncontradaException {
-        System.out.println("Verificando se o carro existe antes de remover.");
-        pesquisarPorId(id); // Lança exceção se não encontrar
+        logger.info("Removendo carro com ID: " + id);
+        pesquisarPorId(id);
 
         System.out.println("Carro encontrado. Preparando para remover.");
         try (PreparedStatement stm = connection.prepareStatement(SQL_DELETE)) {
             stm.setInt(1, id);
             int affectedRows = stm.executeUpdate();
-            System.out.println("Linhas afetadas pela remoção: " + affectedRows); // Log da quantidade de linhas afetadas
+            System.out.println("Linhas afetadas pela remoção: " + affectedRows);
             if (affectedRows == 0) {
                 throw new EntidadeNaoEncontradaException("Carro não encontrado para remoção");
             }
+            logger.info("Carro removido com sucesso, ID: " + id);
         }
     }
 
@@ -127,9 +138,23 @@ public class CarroRepo {
             stm.setNull(5, Types.INTEGER);
         }
 
-        stm.setString(6, carro.getCambio());
-        stm.setString(7, carro.getCombustivel());
-        stm.setString(8, carro.getCor());
+        if (carro.getCambio() != null) {
+            stm.setString(6, carro.getCambio());
+        } else {
+            stm.setNull(6, Types.VARCHAR);
+        }
+
+        if (carro.getCombustivel() != null) {
+            stm.setString(7, carro.getCombustivel());
+        } else {
+            stm.setNull(7, Types.VARCHAR);
+        }
+
+        if (carro.getCor() != null) {
+            stm.setString(8, carro.getCor());
+        } else {
+            stm.setNull(8, Types.VARCHAR);
+        }
 
         if (carro.getQuilometragem() != null) {
             stm.setInt(9, carro.getQuilometragem());
@@ -142,14 +167,15 @@ public class CarroRepo {
         } else {
             stm.setNull(10, Types.INTEGER);
         }
+
     }
 
     private void validarDadosCarro(Carro carro) {
         if (!validador.validaCampoObg(carro.getModelo()) ||
                 !validador.validaCampoObg(carro.getMarca()) ||
                 !validador.validaAno(carro.getAnoFabricacao()) ||
-                !validador.validaNumPositivo(carro.getTorque() != null ? carro.getTorque() : 0) ||
                 !validador.validaPlaca(carro.getPlaca())) {
+            logger.warn("Dados inválidos para o carro: " + carro);
             throw new IllegalArgumentException("Dados inválidos para o carro.");
         }
     }

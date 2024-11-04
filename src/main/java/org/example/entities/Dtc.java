@@ -50,5 +50,19 @@ public class Dtc extends _EntidadeBase {
                 ", descricao='" + descricao + '\'' +
                 '}';
     }
+    public boolean isCodigoIgual(Dtc outroDtc) {
+        if (outroDtc == null) return false;
+        return this.codDtc.equalsIgnoreCase(outroDtc.getCodDtc());
+    }
+    public void atualizarDescricao(String novaDescricao, String justificativa) {
+        if (novaDescricao != null && justificativa != null) {
+            this.descricao = novaDescricao + " (Justificativa: " + justificativa + ")";
+        }
+    }
+    public String getCodigoFormatado() {
+        if (codDtc == null || codDtc.length() < 2) return codDtc;
+        return codDtc.substring(0, 1) + "-" + codDtc.substring(1);
+    }
+
 }
 

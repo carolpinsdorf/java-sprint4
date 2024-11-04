@@ -38,7 +38,6 @@ public class Endereco extends _EntidadeBase {
     public Endereco() {
     }
 
-    // Construtor sem ID
     public Endereco(int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Cliente cliente, Oficina oficina) {
         this.cepEndereco = cepEndereco;
         this.logEndereco = logEndereco;
@@ -51,7 +50,6 @@ public class Endereco extends _EntidadeBase {
         this.oficina = oficina;
     }
 
-    // Construtor com ID
     public Endereco(int id, int cepEndereco, String logEndereco, int numEndereco, String cmplEndereco, String bairro, String cidade, String estado, Cliente cliente, Oficina oficina) {
         super(id);
         this.cepEndereco = cepEndereco;
@@ -65,7 +63,6 @@ public class Endereco extends _EntidadeBase {
         this.oficina = oficina;
     }
 
-    // Getters e Setters
 
     public int getCepEndereco() {
         return cepEndereco;
@@ -153,4 +150,26 @@ public class Endereco extends _EntidadeBase {
                 ", oficina=" + oficina +
                 '}';
     }
+    public boolean pertenceAoCliente(Cliente cliente) {
+        return this.cliente != null && this.cliente.equals(cliente);
+    }
+    public int calcularDistancia(Endereco outroEndereco) {
+        if (outroEndereco == null) return -1;
+        return Math.abs(this.cepEndereco - outroEndereco.getCepEndereco());
+    }
+    public boolean isCapital() {
+        String[] capitais = {"São Paulo", "Rio de Janeiro", "Brasília", "Salvador", "Fortaleza",
+                "Belo Horizonte", "Manaus", "Curitiba", "Recife", "Porto Alegre"};
+        for (String capital : capitais) {
+            if (cidade.equalsIgnoreCase(capital)) return true;
+        }
+        return false;
+    }
+    public String getFormatoPostal() {
+        return String.format("%s, %d%s\n%s - %s\n%s - %d",
+                logEndereco, numEndereco,
+                (cmplEndereco != null && !cmplEndereco.isEmpty()) ? ", " + cmplEndereco : "",
+                bairro, cidade, estado, cepEndereco);
+    }
+
 }

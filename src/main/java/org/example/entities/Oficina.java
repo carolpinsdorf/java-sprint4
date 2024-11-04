@@ -1,10 +1,12 @@
 package org.example.entities;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "T_OFICINA")
 public class Oficina extends _EntidadeBase {
+
 
     @Column(name = "cnpj_oficina", nullable = false, unique = true)
     private long cnpjOficina;
@@ -50,5 +52,15 @@ public class Oficina extends _EntidadeBase {
                 ", acesso=" + acesso +
                 '}';
     }
+    public void atualizarCnpj(long novoCnpj) {
+        this.cnpjOficina = novoCnpj;
+    }
+    public String exibirCnpj() {
+        return String.format("CNPJ da Oficina: %d", cnpjOficina);
+    }
+    public void associarAcesso(Acesso novoAcesso) {
+        this.acesso = novoAcesso;
+    }
+
 }
 

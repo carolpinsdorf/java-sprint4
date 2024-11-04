@@ -50,4 +50,14 @@ public class OrdemServico extends _EntidadeBase {
                 ", agendamento=" + agendamento +
                 '}';
     }
+    public void atualizarStatusServico(String novoStatus) {
+        this.statusServico = novoStatus;
+    }
+    public boolean isServicoCompleto() {
+        return "Completo".equalsIgnoreCase(statusServico);
+    }
+    public void cancelarServico() {
+        this.statusServico = "Cancelado";
+    }
+
 }

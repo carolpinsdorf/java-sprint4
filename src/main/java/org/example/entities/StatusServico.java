@@ -5,7 +5,7 @@ public enum StatusServico {
     EM_ANDAMENTO,
     CONCLUIDO,
     CANCELADO,
-    CONFIRMADO; // Novo status CONFIRMADO
+    CONFIRMADO;
 
     public boolean isFinalizado() {
         return this == CONCLUIDO || this == CANCELADO;
@@ -17,13 +17,13 @@ public enum StatusServico {
             case EM_ANDAMENTO: return "Serviço em andamento";
             case CONCLUIDO: return "Serviço concluído";
             case CANCELADO: return "Serviço cancelado";
-            case CONFIRMADO: return "Serviço confirmado"; // Descrição do novo status
+            case CONFIRMADO: return "Serviço confirmado";
             default: return "Status desconhecido";
         }
     }
 
     public boolean isEmProgresso() {
-        return this == EM_ANDAMENTO || this == CONFIRMADO; // Considera CONFIRMADO como em progresso
+        return this == EM_ANDAMENTO || this == CONFIRMADO;
     }
 
     public boolean isPendente() {
@@ -31,7 +31,7 @@ public enum StatusServico {
     }
 
     public boolean podeIniciar() {
-        return this == PENDENTE || this == CONFIRMADO; // Permite iniciar a partir de CONFIRMADO
+        return this == PENDENTE || this == CONFIRMADO;
     }
 
 }
